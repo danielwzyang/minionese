@@ -1,15 +1,19 @@
-package tests;
-
+package test;
 import java.io.File;
 import java.util.Scanner;
-import java.util.Vector;
 
-import lexer.Lexer;
-import lexer.Token;
+import parser.Parser;
+import parser.Program;
+import parser.Stmt;
 
 public class Test {
     public static void main(String[] args) {
         try {
+            if (args.length < 1) {
+                System.err.println("No file name provided.");
+                System.exit(0);
+            }
+
             File file = new File(args[0]);
             String src = "";
             Scanner reader = new Scanner(file);
@@ -17,11 +21,10 @@ public class Test {
             src += reader.next();
             reader.close();
 
-            Lexer tokenizer = new Lexer();
-            Vector<Token> tokens = tokenizer.tokenize(src);
-            for (Token token : tokens) {
-                System.out.println(token);
-            }
+            Parser parser = new Parser();
+            Program program = parser.makeAST(src);
+            for ( Stmt statement : program.getBody()) 
+                System.out.println(statement);
         } catch (Exception error) {
             System.err.println(error);
             System.exit(0);

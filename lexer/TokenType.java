@@ -1,5 +1,4 @@
 package lexer;
-
 public enum TokenType {
     EOF,
     Number,

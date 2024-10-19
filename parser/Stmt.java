@@ -1,5 +1,4 @@
 package parser;
-
 public class Stmt {
     protected NodeType kind;
 
@@ -9,5 +8,9 @@ public class Stmt {
 
     public NodeType getKind() {
         return kind;
+    }
+
+    public String toString() {
+        return "" + kind;
     }
 }

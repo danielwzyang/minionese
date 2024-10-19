@@ -1,5 +1,4 @@
 package parser;
-
 public enum NodeType {
     Program,
     NumericLiteral,

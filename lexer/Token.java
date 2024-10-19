@@ -14,6 +14,14 @@ public class Token {
         this.type = type;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public TokenType getType() {
+        return type;
+    }
+
     public String toString() {
         return "{ " + value + ", " + type + " }";
     }

@@ -1,14 +1,19 @@
 package parser;
+import java.util.Vector;
 
 public class Program extends Stmt {
-    private Stmt[] body;
+    private Vector<Stmt> body;
 
-    public Program(Stmt[] body) {
+    public Program() {
         super(NodeType.Program);
-        this.body = body;
+        this.body = new Vector<>();
     }
 
-    public Stmt[] getBody() {
+    public Vector<Stmt> getBody() {
         return body;
+    }
+
+    public void bodyPush(Stmt statement) {
+        body.add(statement);
     }
 }
