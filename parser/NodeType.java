@@ -3,5 +3,6 @@ public enum NodeType {
     Program,
     NumericLiteral,
     Identifier,
-    BinaryExpr;
+    BinaryExpr,
+    NullLiteral
 }

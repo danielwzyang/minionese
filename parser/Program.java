@@ -16,4 +16,8 @@ public class Program extends Stmt {
     public void bodyPush(Stmt statement) {
         body.add(statement);
     }
+
+    public String toString() {
+        return "{ kind: " + super.kind + ", body: " + body + " }";
+    }
 }

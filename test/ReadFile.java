@@ -6,7 +6,7 @@ import parser.Parser;
 import parser.Program;
 import parser.Stmt;
 
-public class Test {
+public class ReadFile {
     public static void main(String[] args) {
         try {
             if (args.length < 1) {
@@ -23,8 +23,7 @@ public class Test {
 
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
-            for ( Stmt statement : program.getBody()) 
-                System.out.println(statement);
+            System.out.println(program);
         } catch (Exception error) {
             System.err.println(error);
             System.exit(0);
