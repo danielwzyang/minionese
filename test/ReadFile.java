@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import parser.Parser;
 import parser.Program;
-import parser.Stmt;
 
 public class ReadFile {
     public static void main(String[] args) {

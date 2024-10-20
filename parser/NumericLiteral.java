@@ -1,10 +1,14 @@
 package parser;
 public class NumericLiteral extends Expr {
-    double value;
+    private double value;
 
     public NumericLiteral(double value) {
         super(NodeType.NumericLiteral);
         this.value = value;
+    }
+
+    public double getValue() {
+        return value;
     }
 
     public String toString() {
