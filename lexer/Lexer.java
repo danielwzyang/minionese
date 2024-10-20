@@ -12,7 +12,7 @@ public class Lexer {
         // defines the keyword la to use as a variable definition
         keywords = new HashMap<>();
         keywords.put("la", TokenType.Define);
-        keywords.put("no", TokenType.Null);
+        keywords.put("fin", TokenType.Final);
     }
 
     public List<Token> tokenize(String src) {
@@ -23,10 +23,9 @@ public class Lexer {
                 "|(?<IDENTIFIER>[a-zA-Z_][\\w]*)" +
                 "|(?<OPENP>\\()" +
                 "|(?<CLOSEP>\\))" +
-                "|(?<BINOP>[+\\-*/%])" +
+                "|(?<BINOP>[+\\-*/%\\^])" +
                 "|(?<EQUALS>=)" +
-                "|(?<WHITESPACE>[ \\t]+)" + 
-                "|(?<NULL>[null])";
+                "|(?<WHITESPACE>[ \\t]+)";
 
         Pattern pattern = Pattern.compile(patterns);
         Matcher matcher = pattern.matcher(src);
@@ -51,8 +50,6 @@ public class Lexer {
                 tokens.add(new Token(matcher.group("BINOP"), TokenType.BinOp));
             else if (matcher.group("EQUALS") != null)
                 tokens.add(new Token(matcher.group("EQUALS"), TokenType.Equals));
-            else if (matcher.group("NULL") != null)
-                tokens.add(new Token(matcher.group("NULL"), TokenType.Null));
         }
 
         // need an end of file token since we're popping tokens in the parser and we don't want any issues

@@ -4,5 +4,5 @@ public enum NodeType {
     NumericLiteral,
     Identifier,
     BinaryExpr,
-    NullLiteral
+    Declaration, Assignment
 }
