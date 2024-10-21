@@ -14,6 +14,8 @@ public class Interpreter {
                 return evaluate((BinaryExpr) astNode, environment);
             case NodeType.Identifier:
                 return evaluate((Identifier) astNode, environment);
+            case NodeType.ObjectLiteral:
+                return evaluate((ObjectLiteral) astNode, environment);
             case NodeType.Declaration:
                 return evaluate((Declaration) astNode, environment);
             case NodeType.Assignment:
@@ -83,8 +85,8 @@ public class Interpreter {
         }
     }
 
-    // evaluates an identifier by checking the environment
     public RuntimeValue evaluate(Identifier identifier, Environment environment) {
+        // evaluates an identifier by checking the environment
         return environment.getVariableValue(identifier.getSymbol());
     }
 
@@ -103,6 +105,9 @@ public class Interpreter {
                     break;
                 case NodeType.Identifier:
                     value = evaluate((Identifier) declaration.getValue(), environment);
+                    break;
+                case NodeType.ObjectLiteral:
+                    value = evaluate((ObjectLiteral) declaration.getValue(), environment);
                     break;
                 default:
                     System.err.println("This declaration expression hasn't been setup for interpretation. Expression: " + declaration);
@@ -141,5 +146,19 @@ public class Interpreter {
         }
 
         return new NullVal();
+    }
+
+    public RuntimeValue evaluate(ObjectLiteral objectLiteral, Environment environment) {
+        ObjectVal object = new ObjectVal();
+        for (Property property : objectLiteral.getProperties()) {
+            // if value is null then we're using { key } otherwise it's { key : value }
+            // if it's { key } then it's a variable so we get it from the environment
+            // otherwise we evaluate the value expression
+            RuntimeValue value = property.getValue() == null ? environment.getVariableValue(property.getKey()) : evaluate(property.getValue(), environment);
+
+            object.addProperty(property.getKey(), value);
+        }
+
+        return object;
     }
 }

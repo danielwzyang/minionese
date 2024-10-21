@@ -7,5 +7,7 @@ public enum TokenType {
     Identifier,
     Equals,
     OpenP, CloseP,
+    OpenBrace, CloseBrace,
+    Comma, Colon,
     BinOp,
 }

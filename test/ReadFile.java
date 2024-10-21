@@ -31,6 +31,7 @@ public class ReadFile {
             
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
+            System.out.println(program);
             Interpreter interpreter = new Interpreter();
             System.out.println(interpreter.evaluate(program, globalEnvironment));
         } catch (Exception error) {

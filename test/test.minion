@@ -1,6 +1,9 @@
-la three = nah + dul
-three
-three = sae
-three
-x
-three ^ x
+la poop = 3;
+
+la papoy = { 
+    test: 3 + 3,
+    foo: {
+        bar: da
+    },
+    poop
+}

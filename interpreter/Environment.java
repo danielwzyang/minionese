@@ -18,13 +18,13 @@ public class Environment {
         // ex: nool = null
 
         declareVariable("nool", new NullVal(), true);
+        declareVariable("no", new BoolVal(false), true);
+        declareVariable("da", new BoolVal(true), true);
 
         declareVariable("nah", new NumberVal(1), true);
         declareVariable("dul", new NumberVal(2), true);
         declareVariable("sae", new NumberVal(3), true);
-
-        declareVariable("no", new BoolVal(false), true);
-        declareVariable("da", new BoolVal(true), true);
+        declareVariable("pi", new NumberVal(Math.PI), true);
     }
     
     // for the constructors we have one with no parent and one with a parent

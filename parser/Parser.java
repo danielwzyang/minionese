@@ -1,5 +1,6 @@
 package parser;
 import java.util.List;
+import java.util.ArrayList;
 
 import lexer.Lexer;
 import lexer.Token;
@@ -76,6 +77,7 @@ public class Parser {
             exponential (^)
             multiplicative (*, /, %)
             additive (+, -)
+            object
             assignment (=)
     */
     
@@ -148,9 +150,50 @@ public class Parser {
         return left;
     }
 
+    private Expr parseObject() {
+        // if we're not at an open brace then we continue up the order of precedence
+        if (tokens.get(0).getType() != TokenType.OpenBrace)
+            return parseAdditiveExpr();
+
+        popLeft(); // pops open brace
+        List<Property> properties = new ArrayList<Property>();
+
+        // we want to keep fetching the properties until we reach the close bracket or the end of file
+        while (tokens.get(0).getType() != TokenType.EOF && tokens.get(0).getType() != TokenType.CloseBrace) {
+            //                              first case           second case
+            // objects can either be { key: val, key2: val } or { key, key2 } (passing in variables)
+
+            // gets key
+            Token key = popLeft(TokenType.Identifier, "Object key expected.");
+
+            // if there's a comma (second case of object definition described above)
+            if (tokens.get(0).getType() == TokenType.Comma) {
+                popLeft(); // pops comma
+                properties.add(new Property(key.getValue()));
+                continue;
+            }
+
+            // if there's no comma (second case)
+            if (tokens.get(0).getType() == TokenType.CloseBrace) {
+                properties.add(new Property(key.getValue()));
+                continue;
+            }
+
+            // first case
+            popLeft(TokenType.Colon, "Colon expected after key."); // pops colon
+            properties.add(new Property(key.getValue(), parseExpr()));
+            
+            if (tokens.get(0).getType() != TokenType.CloseBrace)
+                popLeft(TokenType.Comma, "Comma or close brace expected after property."); // pops comma
+        }
+
+        popLeft(TokenType.CloseBrace, "Closing brace expected.");
+        return new ObjectLiteral(properties);
+    }
+
     private Expr parseAssignment() {
         // gets the expression that we're assigning
-        Expr left = parseAdditiveExpr();
+        Expr left = parseObject();
 
         while (tokens.get(0).getType() == TokenType.Equals) {
             popLeft(); // pop the equals sign
