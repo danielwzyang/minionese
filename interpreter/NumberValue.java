@@ -1,14 +1,14 @@
 package interpreter;
 
-public class NumberVal extends RuntimeValue {
+public class NumberValue extends RuntimeValue {
     private double value;
 
-    public NumberVal() {
+    public NumberValue() {
         super(ValueType.Number);
         value = 0;
     }
 
-    public NumberVal(double value) {
+    public NumberValue(double value) {
         super(ValueType.Number);
         this.value = value;
     }

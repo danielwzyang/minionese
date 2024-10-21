@@ -10,6 +10,8 @@ public class Interpreter {
         switch (astNode.getKind()) {
             case NodeType.NumericLiteral:
                 return evaluate((NumericLiteral) astNode);
+            case NodeType.StringLiteral:
+                return evaluate((StringLiteral) astNode);
             case NodeType.BinaryExpr:
                 return evaluate((BinaryExpr) astNode, environment);
             case NodeType.Identifier:
@@ -23,14 +25,14 @@ public class Interpreter {
             default:
                 System.err.println("This AST Node hasn't been setup for interpretation. Node: " + astNode);
                 System.exit(0);
-                return new NullVal();
+                return new NullValue();
         }
     }
 
     public RuntimeValue evaluate(Program program, Environment globalEnvironment) {
         // this is what's called when we run the code since we have to run the program through it
         // here we keep track of the last evaluated statement
-        RuntimeValue last = new NullVal();
+        RuntimeValue last = new NullValue();
 
         for (Stmt statement : program.getBody()) {
             // goes through every statement and evaluates it
@@ -42,7 +44,12 @@ public class Interpreter {
 
     public RuntimeValue evaluate(NumericLiteral astNode) {
         // if the node is a number then we can just get the value
-        return new NumberVal(astNode.getValue());
+        return new NumberValue(astNode.getValue());
+    }
+
+    public RuntimeValue evaluate(StringLiteral astNode) {
+        // if the node is a string then we can just get the value
+        return new StringValue(astNode.getValue());
     }
 
     public RuntimeValue evaluate(BinaryExpr binOp, Environment environment) {
@@ -51,38 +58,67 @@ public class Interpreter {
         RuntimeValue left = evaluate(binOp.getLeft(), environment);
         RuntimeValue right = evaluate(binOp.getRight(), environment);
 
+        String operator = binOp.getOperator();
+
         // if both sides are numbers then we've boiled down to the simplest form
         if (left.getType() == ValueType.Number && right.getType() == ValueType.Number) {
-            return evaluate((NumberVal) left, (NumberVal) right, binOp.getOperator());
+            return evaluate((NumberValue) left, (NumberValue) right, operator);
         }
 
-        return new NullVal();
+        // if the left side is a string then we have to handle a lot of cases like types converting and string multiplication etc.
+        if (left.getType() == ValueType.String) {
+            switch (right.getType()) {
+                case ValueType.String:
+                    return evaluate((StringValue) left, (StringValue) right, operator);
+                case ValueType.Number:
+                    return evaluate((StringValue) left, (NumberValue) right, operator);
+                default:
+                    System.err.println("Binary operations between a String and " + right.getType() + " are not supported.");
+            }
+        }
+
+        return new NullValue();
     }
 
-    public RuntimeValue evaluate(NumberVal left, NumberVal right, String operator) {
+    public RuntimeValue evaluate(NumberValue left, NumberValue right, String operator) {
         // since the binexpr is at its simplest form we just need to do the operations
         switch (operator) {
             case "+":
-                return new NumberVal(left.getValue() + right.getValue());
+                return new NumberValue(left.getValue() + right.getValue());
             case "-":
-                return new NumberVal(left.getValue() - right.getValue());
+                return new NumberValue(left.getValue() - right.getValue());
             case "*":
-                return new NumberVal(left.getValue() * right.getValue());
+                return new NumberValue(left.getValue() * right.getValue());
             case "/":
                 if (right.getValue() == 0) {
                     System.err.println("Error: dividing by zero.");
                     System.exit(0);
                 }
-                return new NumberVal(left.getValue() / right.getValue());
+                return new NumberValue(left.getValue() / right.getValue());
             case "%":
-                return new NumberVal(left.getValue() % right.getValue());
+                return new NumberValue(left.getValue() % right.getValue());
             case "^":
-                return new NumberVal(Math.pow(left.getValue(), right.getValue()));
+                return new NumberValue(Math.pow(left.getValue(), right.getValue()));
             default:
-                System.err.println("Unexpected operator: " + operator);
+                System.err.println("Unexpected operator between numbers: " + operator);
                 System.exit(0);
-                return new NumberVal(0);
+                return new NumberValue(0);
         }
+    }
+
+    public RuntimeValue evaluate(StringValue left, StringValue right, String operator) {
+        switch (operator) {
+            case "+":
+                return new StringValue(left.getValue() + right.getValue());
+            default:
+                System.err.println("This operation isn't supported between two strings: " + operator);
+                System.exit(0);
+                return new StringValue(null);
+        }
+    }
+
+    public RuntimeValue evaluate(StringValue left, NumberValue right, String operator) {
+        
     }
 
     public RuntimeValue evaluate(Identifier identifier, Environment environment) {
@@ -91,7 +127,7 @@ public class Interpreter {
     }
 
     public RuntimeValue evaluate(Declaration declaration, Environment environment) {
-        RuntimeValue value = new NullVal();
+        RuntimeValue value = new NullValue();
 
         // we need to check if the value is null or not because it can cause an error with getKind()
         // value is initialized as a null value to handle the case that the value is assigned to null
@@ -135,6 +171,8 @@ public class Interpreter {
                     return environment.assignVariable(symbol, evaluate((Identifier) assignment.getValue(), environment));
                 case NodeType.Assignment:
                     return environment.assignVariable(symbol, evaluate(assignment.getValue(), environment));
+                case NodeType.ObjectLiteral:
+                    return environment.assignVariable(symbol, evaluate((ObjectLiteral) assignment.getValue(), environment));
                 default:
                     System.err.println("This value cannot be assigned to the identifier: " + assignment.getValue());
                     System.exit(0);
@@ -145,11 +183,11 @@ public class Interpreter {
             System.exit(0);
         }
 
-        return new NullVal();
+        return new NullValue();
     }
 
     public RuntimeValue evaluate(ObjectLiteral objectLiteral, Environment environment) {
-        ObjectVal object = new ObjectVal();
+        ObjectValue object = new ObjectValue();
         for (Property property : objectLiteral.getProperties()) {
             // if value is null then we're using { key } otherwise it's { key : value }
             // if it's { key } then it's a variable so we get it from the environment

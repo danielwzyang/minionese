@@ -17,14 +17,14 @@ public class Environment {
         // initialize built-in global variables
         // ex: nool = null
 
-        declareVariable("nool", new NullVal(), true);
-        declareVariable("no", new BoolVal(false), true);
-        declareVariable("da", new BoolVal(true), true);
+        declareVariable("nool", new NullValue(), true);
+        declareVariable("no", new BooleanValue(false), true);
+        declareVariable("da", new BooleanValue(true), true);
 
-        declareVariable("nah", new NumberVal(1), true);
-        declareVariable("dul", new NumberVal(2), true);
-        declareVariable("sae", new NumberVal(3), true);
-        declareVariable("pi", new NumberVal(Math.PI), true);
+        declareVariable("nah", new NumberValue(1), true);
+        declareVariable("dul", new NumberValue(2), true);
+        declareVariable("sae", new NumberValue(3), true);
+        declareVariable("pi", new NumberValue(Math.PI), true);
     }
     
     // for the constructors we have one with no parent and one with a parent
@@ -109,7 +109,7 @@ public class Environment {
         return parent.resolveScope(identifier);
     }
 
-    public Boolean isFinal(String identifier) {
+    public boolean isFinal(String identifier) {
         return finals.contains(identifier);
     }
 }

@@ -1,16 +1,20 @@
 package interpreter;
 
-public class BoolVal extends RuntimeValue {
+public class BooleanValue extends RuntimeValue {
     private boolean value;
 
-    public BoolVal() {
+    public BooleanValue() {
         super(ValueType.Boolean);
         value = false;
     }
 
-    public BoolVal(boolean value) {
+    public BooleanValue(boolean value) {
         super(ValueType.Boolean);
         this.value = value;
+    }
+
+    public boolean getValue() {
+        return value;
     }
 
     public String toString() {

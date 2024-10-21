@@ -1,9 +1,9 @@
 package interpreter;
 
-public class NullVal extends RuntimeValue {
+public class NullValue extends RuntimeValue {
     private String value;
 
-    public NullVal() {
+    public NullValue() {
         super(ValueType.Null);
         value = "null";
     }

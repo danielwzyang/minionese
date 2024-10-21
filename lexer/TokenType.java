@@ -3,6 +3,7 @@ public enum TokenType {
     Null,
     EOF,
     Number,
+    Quote, String,
     Define, Final,
     Identifier,
     Equals,

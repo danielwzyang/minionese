@@ -3,10 +3,10 @@ package interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ObjectVal extends RuntimeValue {
+public class ObjectValue extends RuntimeValue {
     private Map<String, RuntimeValue> properties;
 
-    public ObjectVal() {
+    public ObjectValue() {
         super(ValueType.Object);
         properties = new HashMap<>();
     }

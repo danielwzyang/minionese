@@ -3,10 +3,10 @@ import java.util.Scanner;
 
 import parser.Parser;
 import parser.Program;
-import interpreter.BoolVal;
+import interpreter.BooleanValue;
 import interpreter.Environment;
 import interpreter.Interpreter;
-import interpreter.NumberVal;
+import interpreter.NumberValue;
 
 public class REPL {
     public static void main(String[] args) {
@@ -15,8 +15,8 @@ public class REPL {
 
         // declare testing variables
         Environment globalEnvironment = new Environment();
-        globalEnvironment.declareVariable("x", new NumberVal(3), false);
-        globalEnvironment.declareVariable("y", new BoolVal(), false);
+        globalEnvironment.declareVariable("x", new NumberValue(3), false);
+        globalEnvironment.declareVariable("y", new BooleanValue(), false);
 
         while (true) {
             System.out.print("> ");

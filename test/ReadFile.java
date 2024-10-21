@@ -2,10 +2,10 @@ package test;
 import java.io.File;
 import java.util.Scanner;
 
-import interpreter.BoolVal;
+import interpreter.BooleanValue;
 import interpreter.Environment;
 import interpreter.Interpreter;
-import interpreter.NumberVal;
+import interpreter.NumberValue;
 import parser.Parser;
 import parser.Program;
 
@@ -26,12 +26,11 @@ public class ReadFile {
 
             // declare testing variables
             Environment globalEnvironment = new Environment();
-            globalEnvironment.declareVariable("x", new NumberVal(3), false);
-            globalEnvironment.declareVariable("y", new BoolVal(), false);
+            globalEnvironment.declareVariable("x", new NumberValue(3), false);
+            globalEnvironment.declareVariable("y", new BooleanValue(), false);
             
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
-            System.out.println(program);
             Interpreter interpreter = new Interpreter();
             System.out.println(interpreter.evaluate(program, globalEnvironment));
         } catch (Exception error) {
