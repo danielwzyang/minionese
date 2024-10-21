@@ -1,7 +1,5 @@
 package parser;
 
-import java.util.Vector;
-
 public class Declaration extends Stmt {
     private String identifier;
     private Expr value;
