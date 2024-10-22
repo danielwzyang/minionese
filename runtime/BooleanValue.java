@@ -30,6 +30,8 @@ public class BooleanValue extends RuntimeValue {
                         return new BooleanValue(value && rightBoolean);
                     case "|":
                         return new BooleanValue(value || rightBoolean);
+                    case "==":
+                        return new BooleanValue(value == rightBoolean);
                     default:
                         System.err.println("The operation " + operator + " isn't supported between two Booleans.");
                         System.exit(0);

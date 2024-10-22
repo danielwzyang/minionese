@@ -42,6 +42,8 @@ public class NumberValue extends RuntimeValue {
                         return new NumberValue(value % rightDouble);
                     case "^":
                         return new NumberValue(Math.pow(value, rightDouble));
+                    case "==":
+                        return new BooleanValue(value == rightDouble);
                     default:
                         System.err.println("The operation " + operator + " isn't supported between two Numbers.");
                         System.exit(0);

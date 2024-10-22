@@ -25,6 +25,8 @@ public class Environment {
         declareVariable("dul", new NumberValue(2), true);
         declareVariable("sae", new NumberValue(3), true);
         declareVariable("pi", new NumberValue(Math.PI), true);
+
+        declareVariable("ian", new StringValue("cucaracha"), true);
     }
     
     // for the constructors we have one with no parent and one with a parent

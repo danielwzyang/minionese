@@ -77,6 +77,7 @@ public class Parser {
             exponential (^)
             multiplicative (*, /, %)
             additive (+, -)
+            comparitive (&, |, ==)
             object
             assignment (=)
     */
@@ -139,7 +140,7 @@ public class Parser {
     }
 
     private Expr parseAdditiveExpr() {
-        // exact same as above but with additive
+        // the exact same as the multiplicative fuction just with additive operators
         Expr left = parseMultiplicativeExpr();
 
         while (tokens.get(0).getValue().equals("+") || tokens.get(0).getValue().equals("-")) {
@@ -152,12 +153,24 @@ public class Parser {
         return left;
     }
 
-    // TODO: add boolean operators &, |, ==
+    private Expr parseComparitiveExpr() {
+        // the exact same as additive function just with comparitive operators
+        Expr left = parseAdditiveExpr();
+
+        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|") || tokens.get(0).getValue().equals("==")) {
+            String operator = popLeft().getValue();
+            Expr right = parseAdditiveExpr();
+
+            left = new BinaryExpr(left, right, operator);
+        }
+
+        return left;
+    }
 
     private Expr parseObject() {
         // if we're not at an open brace then we continue up the order of precedence
         if (tokens.get(0).getType() != TokenType.OpenBrace)
-            return parseAdditiveExpr();
+            return parseComparitiveExpr();
 
         popLeft(); // pops open brace
         List<Property> properties = new ArrayList<Property>();

@@ -23,6 +23,8 @@ public class StringValue extends RuntimeValue {
                 switch (operator) {
                     case "+":
                         return new StringValue(value + rightString);
+                    case "==":
+                        return new BooleanValue(value.equals(rightString));
                     default:
                         System.err.println("The operation " + operator + " isn't supported between a two Strings.");
                         System.exit(0);

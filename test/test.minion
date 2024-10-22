@@ -1,9 +1,10 @@
-la poop = 3;
+la foo = "fooooo"
 
-la papoy = { 
-    test: 3 + 3,
-    foo: {
-        bar: da
-    },
-    poop
+la poop = {
+    x: 100,
+    y: -32,
+    foo,
+    bar: {
+        baz: da
+    }
 }
