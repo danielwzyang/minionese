@@ -60,29 +60,38 @@ public class Interpreter {
 
         String operator = binOp.getOperator();
 
-        // if both sides are numbers then we've boiled down to the simplest form
-        if (left.getType() == ValueType.Number && right.getType() == ValueType.Number) {
-            return evaluate((NumberValue) left, (NumberValue) right, operator);
+        // if the left side is a number then we have to handle the right side being different types
+        if (left.getType() == ValueType.Number) {
+            switch (right.getType()) {
+                case ValueType.Number:
+                    return evaluate((NumberValue) left, (NumberValue) right, operator);
+                case ValueType.String:
+                    return evaluate((NumberValue) left, (StringValue) right, operator);
+                default:
+                    System.err.println("Binary operations between a String and " + right.getType() + " are not supported.");
+            }
+            
         }
 
-        // if the left side is a string then we have to handle a lot of cases like types converting and string multiplication etc.
+        // left side is a string, handle the right side being different types
         if (left.getType() == ValueType.String) {
             switch (right.getType()) {
                 case ValueType.String:
                     return evaluate((StringValue) left, (StringValue) right, operator);
                 case ValueType.Number:
                     return evaluate((StringValue) left, (NumberValue) right, operator);
+                case ValueType.Boolean:
+                    return evaluate((StringValue) left, (BooleanValue) right, operator);
                 default:
                     System.err.println("Binary operations between a String and " + right.getType() + " are not supported.");
             }
         }
         
-        System.err.println("Operation between two types in order " + left.getType() + " and " + right.getType() + " is not supported. Returning null value instead.");
+        System.err.println("The operation " + operator + " between " + left.getType() + " and " + right.getType() + " is not supported. Returning null value instead.");
         return new NullValue();
     }
 
     public RuntimeValue evaluate(NumberValue left, NumberValue right, String operator) {
-        // since the binexpr is at its simplest form we just need to do the operations
         switch (operator) {
             case "+":
                 return new NumberValue(left.getValue() + right.getValue());
@@ -115,6 +124,30 @@ public class Interpreter {
             System.err.println("The operation " + operator + " isn't supported between a two Strings.");
                 System.exit(0);
                 return new StringValue(null);
+        }
+    }
+
+    public RuntimeValue evaluate(NumberValue left, StringValue right, String operator) {
+        switch (operator) {
+            case "+":
+                return new StringValue(left.getValue() + right.getValue());
+            case "*":
+                if (left.getValue() <= 0 || (int) left.getValue() != left.getValue()) {
+                    System.err.println("Can only multiply strings by positive non-zero integers. Invalid number: " + left.getValue());
+                    System.exit(0);
+                }
+
+                StringBuilder multipliedString = new StringBuilder();
+
+                for (int i = 0; i < left.getValue(); i++)
+                    multipliedString.append(right.getValue());
+                
+                return new StringValue(multipliedString.toString());
+            default:
+            System.err.println("The operation " + operator + " isn't supported between a Number and a String.");
+                System.exit(0);
+                return new StringValue(null);
+
         }
     }
 
