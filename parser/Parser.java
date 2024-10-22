@@ -102,7 +102,8 @@ public class Parser {
                 return new StringLiteral(token.getValue());
             default:
                 System.err.println("Unexpected token found during parsing: " + token);
-                return new Expr();
+                System.exit(0);
+                return new Identifier(null);
         }
     }
 

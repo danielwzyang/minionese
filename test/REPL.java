@@ -3,10 +3,10 @@ import java.util.Scanner;
 
 import parser.Parser;
 import parser.Program;
-import interpreter.BooleanValue;
-import interpreter.Environment;
-import interpreter.Interpreter;
-import interpreter.NumberValue;
+import runtime.BooleanValue;
+import runtime.Environment;
+import runtime.NumberValue;
+import runtime.StringValue;
 
 public class REPL {
     public static void main(String[] args) {
@@ -17,6 +17,7 @@ public class REPL {
         Environment globalEnvironment = new Environment();
         globalEnvironment.declareVariable("x", new NumberValue(3), false);
         globalEnvironment.declareVariable("y", new BooleanValue(), false);
+        globalEnvironment.declareVariable("bello", new StringValue("hello"), false);
 
         while (true) {
             System.out.print("> ");
@@ -35,8 +36,7 @@ public class REPL {
 
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
-            Interpreter interpreter = new Interpreter();
-            System.out.println(interpreter.evaluate(program, globalEnvironment));
+            System.out.println(program.evaluate(globalEnvironment));
         }
     }
 }

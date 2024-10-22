@@ -2,12 +2,12 @@ package test;
 import java.io.File;
 import java.util.Scanner;
 
-import interpreter.BooleanValue;
-import interpreter.Environment;
-import interpreter.Interpreter;
-import interpreter.NumberValue;
 import parser.Parser;
 import parser.Program;
+import runtime.BooleanValue;
+import runtime.Environment;
+import runtime.Interpreter;
+import runtime.NumberValue;
 
 public class ReadFile {
     public static void main(String[] args) {

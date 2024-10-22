@@ -1,5 +1,9 @@
 package parser;
 
+import runtime.Environment;
+import runtime.RuntimeValue;
+import runtime.StringValue;
+
 public class StringLiteral extends Expr {
     private String value;
 
@@ -14,5 +18,9 @@ public class StringLiteral extends Expr {
 
     public String toString() {
         return "{ kind: " + super.kind + ", value: " + value + " }";
+    }
+
+    public RuntimeValue evaluate(Environment environment) {
+        return new StringValue(value);
     }
 }

@@ -1,4 +1,4 @@
-package interpreter;
+package runtime;
 
 public enum ValueType {
     Null,

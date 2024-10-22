@@ -1,4 +1,4 @@
-package interpreter;
+package runtime;
 
 public class BooleanValue extends RuntimeValue {
     private boolean value;

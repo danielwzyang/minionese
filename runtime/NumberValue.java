@@ -1,4 +1,4 @@
-package interpreter;
+package runtime;
 
 public class NumberValue extends RuntimeValue {
     private double value;

@@ -1,4 +1,9 @@
 package parser;
+
+import runtime.Environment;
+import runtime.NumberValue;
+import runtime.RuntimeValue;
+
 public class NumericLiteral extends Expr {
     private double value;
 
@@ -13,5 +18,9 @@ public class NumericLiteral extends Expr {
 
     public String toString() {
         return "{ kind: " + super.kind + ", value: " + value + " }";
+    }
+
+    public RuntimeValue evaluate(Environment environment) {
+        return new NumberValue(value);
     }
 }

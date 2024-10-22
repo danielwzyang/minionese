@@ -1,4 +1,4 @@
-package interpreter;
+package runtime;
 
 public class StringValue extends RuntimeValue {
     private String value;

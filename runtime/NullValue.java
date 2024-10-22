@@ -1,4 +1,4 @@
-package interpreter;
+package runtime;
 
 public class NullValue extends RuntimeValue {
     private String value;

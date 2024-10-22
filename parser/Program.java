@@ -1,6 +1,10 @@
 package parser;
 import java.util.Vector;
 
+import runtime.Environment;
+import runtime.NullValue;
+import runtime.RuntimeValue;
+
 public class Program extends Stmt {
     private Vector<Stmt> body;
 
@@ -19,5 +23,18 @@ public class Program extends Stmt {
 
     public String toString() {
         return "{ kind: " + super.kind + ", body: " + body + " }";
+    }
+
+    public RuntimeValue evaluate(Environment globalEnvironment) {
+        // this is what's called when we run the code since we have to run the program through it
+        // here we keep track of the last evaluated statement
+        RuntimeValue last = new NullValue();
+
+        for (Stmt statement : body) {
+            // goes through every statement and evaluates it
+            last = statement.evaluate(globalEnvironment);
+        }
+
+        return last;
     }
 }

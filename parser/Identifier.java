@@ -1,4 +1,8 @@
 package parser;
+
+import runtime.Environment;
+import runtime.RuntimeValue;
+
 public class Identifier extends Expr {
     private String symbol;
 
@@ -13,5 +17,9 @@ public class Identifier extends Expr {
 
     public String toString() {
         return "{ kind: " + super.kind + ", symbol: " + symbol + " }";
+    }
+
+    public RuntimeValue evaluate(Environment environment) {
+        return environment.getVariableValue(symbol);
     }
 }

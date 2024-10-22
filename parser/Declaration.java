@@ -1,5 +1,8 @@
 package parser;
 
+import runtime.Environment;
+import runtime.RuntimeValue;
+
 public class Declaration extends Stmt {
     private String identifier;
     private Expr value;
@@ -35,6 +38,11 @@ public class Declaration extends Stmt {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", identifier: " + identifier + ", value: " + value + ", isFinal: " + isFinal + " }";
+        return "{ kind: " + super.kind + ", identifier: " + identifier + ", value: " + value + ", isFinal: " + isFinal
+                + " }";
+    }
+
+    public RuntimeValue evaluate(Environment environment) {
+        return environment.declareVariable(identifier, value.evaluate(environment), isFinal);
     }
 }
