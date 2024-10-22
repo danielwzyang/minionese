@@ -20,7 +20,7 @@ public class Lexer {
         List<Token> tokens = new ArrayList<Token>();
 
         // set of named capturing groups
-        String patterns = "(?<Number>\\d+(\\.\\d*)?)" +
+        String patterns = "(?<Number>-?\\d+(\\.\\d*)?)" +
                 "|(?<Identifier>[a-zA-Z_][\\w]*)" +
                 "|(?<Quote>\")" +
                 "|(?<OpenP>\\()" +
@@ -37,20 +37,19 @@ public class Lexer {
         Matcher matcher = pattern.matcher(src);
 
         boolean stringOpen = false;
-        String string = "";
+        StringBuilder string = new StringBuilder();
 
         // keeps checking the matcher to go through all the matched tokens
         while (matcher.find()) {
             if (matcher.group("Quote") != null) {
                 stringOpen = !stringOpen;
                 if (!stringOpen) {
-                    tokens.add(new Token(string, TokenType.String));
+                    tokens.add(new Token(string.toString(), TokenType.String));
+                    string.setLength(0);
                 }
-
-                tokens.add(new Token(matcher.group("Quote"), TokenType.Quote));
             }
             else if (stringOpen)
-                string += matcher.group();
+                string.append(matcher.group());
             else if (matcher.group("Whitespace") != null)
                 continue;
             else if (matcher.group("Number") != null)

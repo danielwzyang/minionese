@@ -13,6 +13,6 @@ public class StringValue extends RuntimeValue {
     }
 
     public String toString() {
-        return "{ type: " + super.getType() + ", value: " + value + " }";
+        return "{ type: " + super.getType() + ", value: \"" + value + "\" }";
     }
 }

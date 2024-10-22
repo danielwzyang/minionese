@@ -78,7 +78,6 @@ public class Parser {
             multiplicative (*, /, %)
             additive (+, -)
             object
-            string
             assignment (=)
     */
     
@@ -99,7 +98,8 @@ public class Parser {
                 Expr value = parseExpr(); // evaluate expression inside parentheses
                 popLeft(TokenType.CloseP, "Closed parentheses expected."); // pop closed parentheses
                 return value;
-
+            case TokenType.String:
+                return new StringLiteral(token.getValue());
             default:
                 System.err.println("Unexpected token found during parsing: " + token);
                 return new Expr();
@@ -192,25 +192,9 @@ public class Parser {
         return new ObjectLiteral(properties);
     }
 
-    private Expr parseString() {
-        if (tokens.get(0).getType() != TokenType.Quote)
-            return parseObject();
-        
-        popLeft(); // pops opening quote
-        String value = null;
-
-        if (tokens.get(0).getType() == TokenType.String) {
-            value = popLeft().getValue(); // gets the string value
-        }
-
-        popLeft(TokenType.Quote, "Ending quote expected.");
-        
-        return new StringLiteral(value);
-    }
-
     private Expr parseAssignment() {
         // gets the expression that we're assigning
-        Expr left = parseString();
+        Expr left = parseObject();
 
         while (tokens.get(0).getType() == TokenType.Equals) {
             popLeft(); // pop the equals sign

@@ -76,7 +76,8 @@ public class Interpreter {
                     System.err.println("Binary operations between a String and " + right.getType() + " are not supported.");
             }
         }
-
+        
+        System.err.println("Operation between two types in order " + left.getType() + " and " + right.getType() + " is not supported. Returning null value instead.");
         return new NullValue();
     }
 
@@ -100,7 +101,7 @@ public class Interpreter {
             case "^":
                 return new NumberValue(Math.pow(left.getValue(), right.getValue()));
             default:
-                System.err.println("Unexpected operator between numbers: " + operator);
+                System.err.println("The operation " + operator + " isn't supported between two Numbers.");
                 System.exit(0);
                 return new NumberValue(0);
         }
@@ -111,14 +112,46 @@ public class Interpreter {
             case "+":
                 return new StringValue(left.getValue() + right.getValue());
             default:
-                System.err.println("This operation isn't supported between two strings: " + operator);
+            System.err.println("The operation " + operator + " isn't supported between a two Strings.");
                 System.exit(0);
                 return new StringValue(null);
         }
     }
 
     public RuntimeValue evaluate(StringValue left, NumberValue right, String operator) {
-        
+        switch (operator) {
+            case "+":
+                return new StringValue(left.getValue() + right.getValue());
+            case "*":
+                if (right.getValue() <= 0 || (int) right.getValue() != right.getValue()) {
+                    System.err.println("Can only multiply strings by positive non-zero integers. Invalid number: " + right.getValue());
+                    System.exit(0);
+                }
+
+                StringBuilder multipliedString = new StringBuilder();
+
+                for (int i = 0; i < right.getValue(); i++)
+                    multipliedString.append(left.getValue());
+                
+                return new StringValue(multipliedString.toString());
+            default:
+            System.err.println("The operation " + operator + " isn't supported between a String and a Number.");
+                System.exit(0);
+                return new StringValue(null);
+
+        }
+    }
+
+    public RuntimeValue evaluate(StringValue left, BooleanValue right, String operator) {
+        switch (operator) {
+            case "+":
+                return new StringValue(left.getValue() + right.getValue());
+            default:
+                System.err.println("The operation " + operator + " isn't supported between a String and a Boolean.");
+                System.exit(0);
+                return new StringValue(null);
+
+        }
     }
 
     public RuntimeValue evaluate(Identifier identifier, Environment environment) {
@@ -138,6 +171,9 @@ public class Interpreter {
                     break;
                 case NodeType.NumericLiteral:
                     value = evaluate((NumericLiteral) declaration.getValue());
+                    break;
+                case NodeType.StringLiteral:
+                    value = evaluate((StringLiteral) declaration.getValue());
                     break;
                 case NodeType.Identifier:
                     value = evaluate((Identifier) declaration.getValue(), environment);
