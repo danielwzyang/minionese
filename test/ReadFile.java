@@ -6,7 +6,6 @@ import parser.Parser;
 import parser.Program;
 import runtime.BooleanValue;
 import runtime.Environment;
-import runtime.Interpreter;
 import runtime.NumberValue;
 
 public class ReadFile {
@@ -31,8 +30,7 @@ public class ReadFile {
             
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
-            Interpreter interpreter = new Interpreter();
-            System.out.println(interpreter.evaluate(program, globalEnvironment));
+            System.out.println(program.evaluate(globalEnvironment));
         } catch (Exception error) {
             System.err.println(error);
             System.exit(0);
