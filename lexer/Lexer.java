@@ -25,13 +25,14 @@ public class Lexer {
                 "|(?<Quote>\")" +
                 "|(?<OpenP>\\()" +
                 "|(?<CloseP>\\))" +
-                "|(?<BinOp>[+\\-*/%\\^])" +
+                "|(?<BinOp>[+\\-*/%\\^&\\|])" +
                 "|(?<Equals>=)" +
                 "|(?<Whitespace>[ \\t]+)" +
                 "|(?<OpenBrace>\\{)" +
                 "|(?<CloseBrace>\\})" +
                 "|(?<Comma>,)" +
-                "|(?<Colon>:)";
+                "|(?<Colon>:)" +
+                "|(?<String>.)";
 
         Pattern pattern = Pattern.compile(patterns);
         Matcher matcher = pattern.matcher(src);

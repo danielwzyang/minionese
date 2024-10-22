@@ -18,4 +18,8 @@ public class ObjectValue extends RuntimeValue {
     public String toString() {
         return properties.toString();
     }
+
+    public RuntimeValue operate(RuntimeValue right, String operator) {
+        return new NullValue();
+    }
 }

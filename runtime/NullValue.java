@@ -15,4 +15,8 @@ public class NullValue extends RuntimeValue {
     public String toString() {
         return "{ type: " + super.getType() + ", value: " + value + "}"; 
     }
+
+    public RuntimeValue operate(RuntimeValue right, String operator) {
+        return new NullValue();
+    }
 }

@@ -152,6 +152,8 @@ public class Parser {
         return left;
     }
 
+    // TODO: add boolean operators &, |, ==
+
     private Expr parseObject() {
         // if we're not at an open brace then we continue up the order of precedence
         if (tokens.get(0).getType() != TokenType.OpenBrace)

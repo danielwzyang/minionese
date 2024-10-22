@@ -1,6 +1,6 @@
 package runtime;
 
-public class RuntimeValue {
+public abstract class RuntimeValue {
     private ValueType type;
 
     public RuntimeValue(ValueType type) {
@@ -14,4 +14,6 @@ public class RuntimeValue {
     public String toString() {
         return "" + type;
     }
+
+    public abstract RuntimeValue operate(RuntimeValue right, String operator);
 }
