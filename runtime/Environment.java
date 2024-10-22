@@ -1,9 +1,12 @@
 package runtime;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 
 public class Environment {
     private Environment parent;
@@ -18,6 +21,7 @@ public class Environment {
         // ex: nool = null
 
         declareVariable("nool", new NullValue(), true);
+
         declareVariable("no", new BooleanValue(false), true);
         declareVariable("da", new BooleanValue(true), true);
 
@@ -26,7 +30,20 @@ public class Environment {
         declareVariable("sae", new NumberValue(3), true);
         declareVariable("pi", new NumberValue(Math.PI), true);
 
-        declareVariable("ian", new StringValue("cucaracha"), true);
+        declareVariable("bello", new Method((args, environment) -> {
+            StringJoiner stringJoiner = new StringJoiner(" ");
+            for (RuntimeValue arg : args)
+                stringJoiner.add(arg.valueToString());
+            System.out.println(stringJoiner.toString());
+            
+            return new NullValue();
+        }), true);
+        declareVariable("tiempo", new Method((args, environment) -> {
+            String date = new SimpleDateFormat("MMMM d, yyyy").format(new Date());
+
+            return new StringValue(date);
+        }), true);
+    
     }
     
     // for the constructors we have one with no parent and one with a parent
@@ -94,6 +111,17 @@ public class Environment {
         }
 
         return value;
+    }
+
+    // TODO: add mutability for objects and their properties
+    public RuntimeValue editObject() {
+
+        return new NullValue();
+    }
+
+    public RuntimeValue editProperty() {
+
+        return new NullValue();
     }
 
     public Environment resolveScope(String identifier) {

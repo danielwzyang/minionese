@@ -17,6 +17,10 @@ public class NumberValue extends RuntimeValue {
         return value;
     }
 
+    public String valueToString() {
+        return "" + value;
+    }
+
     public String toString() {
         return "{ type: " + super.getType() + ", value: " + value + "}";
     }

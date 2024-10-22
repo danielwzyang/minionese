@@ -16,7 +16,7 @@ public class Identifier extends Expr {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", symbol: " + symbol + " }";
+        return "{ type: " + super.type + ", symbol: " + symbol + " }";
     }
 
     public RuntimeValue evaluate(Environment environment) {

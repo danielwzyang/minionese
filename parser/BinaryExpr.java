@@ -27,7 +27,7 @@ public class BinaryExpr extends Expr {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", left: " + left + ", right: " + right + ", operator: " + operator + " }";
+        return "{ type: " + super.type + ", left: " + left + ", right: " + right + ", operator: " + operator + " }";
     }
 
     public RuntimeValue evaluate(Environment environment) {

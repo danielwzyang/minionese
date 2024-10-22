@@ -18,7 +18,7 @@ public class ObjectLiteral extends Expr {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", properties: " + properties.toString() + " }";
+        return "{ type: " + super.type + ", properties: " + properties.toString() + " }";
     }
 
     public RuntimeValue evaluate(Environment environment) {

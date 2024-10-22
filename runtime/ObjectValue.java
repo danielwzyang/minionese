@@ -14,6 +14,14 @@ public class ObjectValue extends RuntimeValue {
     public void addProperty(String key, RuntimeValue value) {
         properties.put(key, value);
     }
+
+    public RuntimeValue getPropertyValue(String key) {
+        return properties.get(key);
+    }
+
+    public String valueToString() {
+        return "Object";
+    }
     
     public String toString() {
         return properties.toString();

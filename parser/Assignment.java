@@ -15,7 +15,7 @@ public class Assignment extends Expr {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", assignedExpr: " + assignedExpr + ", value: " + value + " }";
+        return "{ type: " + super.type + ", assignedExpr: " + assignedExpr + ", value: " + value + " }";
     }
 
     public Expr getAssignedExpr() {
@@ -28,11 +28,18 @@ public class Assignment extends Expr {
 
     public RuntimeValue evaluate(Environment environment) {
         // here we're just handling if the assigned expression is an identifier
-        if (assignedExpr.getKind() == NodeType.Identifier) {
+        if (assignedExpr.getType() == NodeType.Identifier) {
             String symbol = ((Identifier) assignedExpr).getSymbol();
 
             return environment.assignVariable(symbol, value.evaluate(environment));
-        } else {
+        }
+        else if (assignedExpr.getType() == NodeType.ObjectLiteral) {
+            return environment.editObject();
+        }
+        else if (assignedExpr.getType() == NodeType.MemberExpr) {
+            return environment.editProperty();
+        }
+        else {
             System.err.println("This expression cannot be assigned: " + assignedExpr);
             System.exit(0);
         }

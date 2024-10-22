@@ -30,8 +30,11 @@ public class Lexer {
                 "|(?<Whitespace>[ \\t]+)" +
                 "|(?<OpenBrace>\\{)" +
                 "|(?<CloseBrace>\\})" +
+                "|(?<OpenBracket>\\[)" +
+                "|(?<CloseBracket>\\])" +
                 "|(?<Comma>,)" +
                 "|(?<Colon>:)" +
+                "|(?<Dot>\\.)" +
                 "|(?<String>[.\n])";
 
         Pattern pattern = Pattern.compile(patterns);
@@ -73,10 +76,16 @@ public class Lexer {
                 tokens.add(new Token(matcher.group("OpenBrace"), TokenType.OpenBrace));
             else if (matcher.group("CloseBrace") != null)
                 tokens.add(new Token(matcher.group("CloseBrace"), TokenType.CloseBrace));
+            else if (matcher.group("OpenBracket") != null)
+                tokens.add(new Token(matcher.group("OpenBracket"), TokenType.OpenBracket));
+            else if (matcher.group("CloseBracket") != null)
+                tokens.add(new Token(matcher.group("CloseBracket"), TokenType.CloseBracket));
             else if (matcher.group("Comma") != null)
                 tokens.add(new Token(matcher.group("Comma"), TokenType.Comma));
             else if (matcher.group("Colon") != null)
                 tokens.add(new Token(matcher.group("Colon"), TokenType.Colon));
+            else if (matcher.group("Dot") != null)
+                tokens.add(new Token(matcher.group("Dot"), TokenType.Dot));
         }
 
         // need an end of file token since we're popping tokens in the parser and we

@@ -1,4 +1,5 @@
 package parser;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -8,13 +9,14 @@ import lexer.TokenType;
 
 public class Parser {
     private List<Token> tokens;
-    
+
     private Token popLeft() {
         return tokens.removeFirst();
     }
 
     private Token popLeft(TokenType expected, String error) {
-        // this does the same thing as the other popLeft but it will throw an error if the token isn't the type it expects
+        // this does the same thing as the other popLeft but it will throw an error if
+        // the token isn't the type it expects
         Token prev = tokens.removeFirst();
         if (prev.getType() != expected) {
             System.err.println(error);
@@ -54,12 +56,13 @@ public class Parser {
 
         // if there's no value provided
         if (tokens.get(0).getType() != TokenType.Equals) {
-            // if the token is final then this doesn't work since we can't define a final with no value
+            // if the token is final then this doesn't work since we can't define a final
+            // with no value
             if (isFinal) {
                 System.err.println("Value expected for final definition of " + identifier + ".");
                 System.exit(0);
             }
-            
+
             return new Declaration(identifier, isFinal);
         }
 
@@ -72,16 +75,18 @@ public class Parser {
     }
 
     /*
-        these go in order of precedence ( first to last )
-            primary
-            exponential (^)
-            multiplicative (*, /, %)
-            additive (+, -)
-            comparitive (&, |, ==)
-            object
-            assignment (=)
-    */
-    
+     * these go in order of precedence ( first to last )
+     * primary
+     * call
+     * member
+     * exponential (^)
+     * multiplicative (*, /, %)
+     * additive (+, -)
+     * comparitive (&, |, ==)
+     * object
+     * assignment (=)
+     */
+
     private Expr parseExpr() {
         // this always calls the one in the bottom of the order of precedence
         return parseAssignment();
@@ -108,16 +113,96 @@ public class Parser {
         }
     }
 
+    private Expr parseCallOrMemberExpr() {
+        Expr member = parseMemberExpr();
+
+        // foo()
+        if (tokens.get(0).getType() == TokenType.OpenP) {
+            return parseCallExpr(member);
+        }
+
+        return member;
+    }
+
+    private Expr parseMemberExpr() {
+        Expr object = parsePrimaryExpr();
+
+        // handles either foo.bar or foo["bar"]
+        while (tokens.get(0).getType() == TokenType.Dot || tokens.get(0).getType() == TokenType.OpenBracket ) {
+            Token operator = popLeft(); // gets either the dot or the bracket
+            Expr property;
+            boolean computed;
+
+            // foo.bar
+            if (operator.getType() == TokenType.Dot) {
+                computed = false;
+                property = parsePrimaryExpr(); // identifier gets parsed as a primary expr
+
+                if (property.getType() != NodeType.Identifier) {
+                    System.err.println("Expected identifier after dot operator but instead received: " + property.getType());
+                }
+
+                // if there's a chain like foo.bar.baz
+                if (tokens.get(0).getType() == TokenType.Dot) {
+                    popLeft(); // gets rid of dot
+                    MemberExpr firstExpr = new MemberExpr(object, property, computed);
+                    return new MemberExpr(firstExpr, parsePrimaryExpr(), computed);
+                }
+            }
+            // foo[bar]
+            else {
+                computed = true;
+                property = parseExpr();
+                popLeft(TokenType.CloseBracket, "Expected closing bracket after computed member call.");
+            }
+
+            return new MemberExpr(object, property, computed);
+        }
+
+        return object;
+    }
+
+    private Expr parseCallExpr(Expr caller) {
+        CallExpr callExpr = new CallExpr(parseArguments(), caller);
+
+        // handles calls like func()() where the first function returns another function
+        if (tokens.get(0).getType() == TokenType.OpenP) {
+            callExpr = (CallExpr) parseCallExpr(caller);
+        }
+
+        return callExpr;
+    }
+
+    private Expr[] parseArguments() {
+        popLeft(); // gets rid of open parentheses
+
+        if (tokens.get(0).getType() == TokenType.CloseP) {
+            popLeft(); // gets rid of closed parentheses
+            return new Expr[0];
+        }
+
+        List<Expr> arguments = new ArrayList<Expr>();
+        arguments.add(parseExpr()); // parses first argument so we're on the comma now
+
+        while (tokens.get(0).getType() == TokenType.Comma) {
+            popLeft(); // gets rid of comma
+            arguments.add(parseExpr());
+        }
+        
+        popLeft(TokenType.CloseP, "Expected closing parentheses after function call.");
+        return arguments.toArray(new Expr[0]);
+    }
+
     private Expr parseExponentialExpr() {
         // we always call the function that's above in the order of precedence
-        Expr left = parsePrimaryExpr();
+        Expr left = parseCallOrMemberExpr();
 
         // basically keeps evaluating the expression and adding it to the right
         while (tokens.get(0).getValue().equals("^")) {
             // now we hit the operator so we want to pop that token
             String operator = popLeft().getValue();
             // the next token is the next expression
-            Expr right = parsePrimaryExpr();
+            Expr right = parseCallOrMemberExpr();
 
             left = new BinaryExpr(left, right, operator);
         }
@@ -129,11 +214,12 @@ public class Parser {
         // the exact same as the exponential function just with multiplicative operators
         Expr left = parseExponentialExpr();
 
-        while (tokens.get(0).getValue().equals("/") || tokens.get(0).getValue().equals("*") || tokens.get(0).getValue().equals("%")) {
+        while (tokens.get(0).getValue().equals("/") || tokens.get(0).getValue().equals("*")
+                || tokens.get(0).getValue().equals("%")) {
             String operator = popLeft().getValue();
             Expr right = parseExponentialExpr();
 
-            left = new BinaryExpr(left, right, operator);   
+            left = new BinaryExpr(left, right, operator);
         }
 
         return left;
@@ -157,7 +243,8 @@ public class Parser {
         // the exact same as additive function just with comparitive operators
         Expr left = parseAdditiveExpr();
 
-        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|") || tokens.get(0).getValue().equals("==")) {
+        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|")
+                || tokens.get(0).getValue().equals("==")) {
             String operator = popLeft().getValue();
             Expr right = parseAdditiveExpr();
 
@@ -175,10 +262,12 @@ public class Parser {
         popLeft(); // pops open brace
         List<Property> properties = new ArrayList<Property>();
 
-        // we want to keep fetching the properties until we reach the close bracket or the end of file
+        // we want to keep fetching the properties until we reach the close bracket or
+        // the end of file
         while (tokens.get(0).getType() != TokenType.EOF && tokens.get(0).getType() != TokenType.CloseBrace) {
-            //                              first case           second case
-            // objects can either be { key: val, key2: val } or { key, key2 } (passing in variables)
+            // first case second case
+            // objects can either be { key: val, key2: val } or { key, key2 } (passing in
+            // variables)
 
             // gets key
             Token key = popLeft(TokenType.Identifier, "Object key expected.");
@@ -199,7 +288,7 @@ public class Parser {
             // first case
             popLeft(TokenType.Colon, "Colon expected after key."); // pops colon
             properties.add(new Property(key.getValue(), parseExpr()));
-            
+
             if (tokens.get(0).getType() != TokenType.CloseBrace)
                 popLeft(TokenType.Comma, "Comma or close brace expected after property."); // pops comma
         }
@@ -215,7 +304,7 @@ public class Parser {
         while (tokens.get(0).getType() == TokenType.Equals) {
             popLeft(); // pop the equals sign
             Expr value = parseAssignment(); // evaluate the rigth hand side
-            
+
             // returns assignment to allow chains like x = y = z
             left = new Assignment(left, value);
         }

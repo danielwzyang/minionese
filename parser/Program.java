@@ -22,7 +22,7 @@ public class Program extends Stmt {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", body: " + body + " }";
+        return "{ type: " + super.type + ", body: " + body + " }";
     }
 
     public RuntimeValue evaluate(Environment globalEnvironment) {

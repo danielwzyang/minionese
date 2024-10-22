@@ -5,5 +5,6 @@ public enum ValueType {
     Number,
     String,
     Boolean,
-    Object
+    Object,
+    Method
 }

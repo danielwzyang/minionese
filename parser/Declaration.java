@@ -38,7 +38,7 @@ public class Declaration extends Stmt {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", identifier: " + identifier + ", value: " + value + ", isFinal: " + isFinal
+        return "{ type: " + super.type + ", identifier: " + identifier + ", value: " + value + ", isFinal: " + isFinal
                 + " }";
     }
 

@@ -4,18 +4,18 @@ import runtime.Environment;
 import runtime.RuntimeValue;
 
 public abstract class Stmt {
-    protected NodeType kind;
+    protected NodeType type;
 
-    public Stmt(NodeType kind) {
-        this.kind = kind;
+    public Stmt(NodeType type) {
+        this.type = type;
     }
 
-    public NodeType getKind() {
-        return kind;
+    public NodeType getType() {
+        return type;
     }
 
     public String toString() {
-        return "" + kind;
+        return "" + type;
     }
 
     public abstract RuntimeValue evaluate(Environment environment);

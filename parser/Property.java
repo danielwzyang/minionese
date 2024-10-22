@@ -28,7 +28,7 @@ public class Property extends Expr {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", key: " + key + ", value: " + value + " }";
+        return "{ type: " + super.type + ", key: " + key + ", value: " + value + " }";
     }
 
     public RuntimeValue evaluate(Environment environment) {

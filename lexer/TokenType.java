@@ -9,6 +9,7 @@ public enum TokenType {
     Equals,
     OpenP, CloseP,
     OpenBrace, CloseBrace,
-    Comma, Colon,
+    OpenBracket, CloseBracket,
+    Comma, Colon, Dot,
     BinOp,
 }

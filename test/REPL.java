@@ -17,7 +17,6 @@ public class REPL {
         Environment globalEnvironment = new Environment();
         globalEnvironment.declareVariable("x", new NumberValue(3), false);
         globalEnvironment.declareVariable("y", new BooleanValue(), false);
-        globalEnvironment.declareVariable("bello", new StringValue("hello"), false);
 
         while (true) {
             System.out.print("> ");
@@ -36,7 +35,7 @@ public class REPL {
 
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
-            System.out.println(program.evaluate(globalEnvironment));
+            program.evaluate(globalEnvironment);
         }
     }
 }

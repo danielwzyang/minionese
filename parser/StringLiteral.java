@@ -17,7 +17,7 @@ public class StringLiteral extends Expr {
     }
 
     public String toString() {
-        return "{ kind: " + super.kind + ", value: " + value + " }";
+        return "{ type: " + super.type + ", value: " + value + " }";
     }
 
     public RuntimeValue evaluate(Environment environment) {

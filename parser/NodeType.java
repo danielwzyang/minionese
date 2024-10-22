@@ -7,4 +7,5 @@ public enum NodeType {
     BinaryExpr,
     Declaration, Assignment,
     ObjectLiteral, Property,
+    MemberExpr, CallExpr
 }

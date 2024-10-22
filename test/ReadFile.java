@@ -1,4 +1,5 @@
 package test;
+
 import java.io.File;
 import java.util.Scanner;
 
@@ -27,10 +28,34 @@ public class ReadFile {
             Environment globalEnvironment = new Environment();
             globalEnvironment.declareVariable("x", new NumberValue(3), false);
             globalEnvironment.declareVariable("y", new BooleanValue(), false);
-            
+
             Parser parser = new Parser();
             Program program = parser.makeAST(src);
-            System.out.println(program.evaluate(globalEnvironment));
+            program.evaluate(globalEnvironment);
+            System.out.println("File read. REPL starting in this environment.");
+
+            System.out.println("Type stop to end. Type ? to see variables.");
+            Scanner input = new Scanner(System.in);
+
+            while (true) {
+                System.out.print("> ");
+                src = input.nextLine();
+                if (src.equals("stop")) {
+                    input.close();
+                    System.exit(0);
+                }
+
+                if (src.equals("?")) {
+                    globalEnvironment.getVariables().forEach((k, v) -> {
+                        System.out.println(k + ": " + v);
+                    });
+                    continue;
+                }
+
+                parser = new Parser();
+                program = parser.makeAST(src);
+                program.evaluate(globalEnvironment);
+            }
         } catch (Exception error) {
             System.err.println(error);
             System.exit(0);
