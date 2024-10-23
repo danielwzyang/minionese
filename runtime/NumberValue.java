@@ -77,7 +77,7 @@ public class NumberValue extends RuntimeValue {
                         return new NullValue();
                 }
             default:
-                System.err.println("The operations between between a Number and a " + right.getType() + " are not supported.");
+                System.err.println("Operations between a Number and a " + right.getType() + " are not supported.");
                 System.exit(0);
                 return new NullValue();
         }

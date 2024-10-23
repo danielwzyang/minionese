@@ -53,7 +53,7 @@ public class BooleanValue extends RuntimeValue {
                 }
 
             default:
-                System.err.println("The operations between between a String and a " + right.getType() + " are not supported.");
+                System.err.println("Operations between a Boolean and a " + right.getType() + " are not supported.");
                 System.exit(0);
                 return new NullValue();
         }
