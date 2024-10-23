@@ -33,11 +33,11 @@ public class Assignment extends Expr {
 
             return environment.assignVariable(symbol, value.evaluate(environment));
         }
-        else if (assignedExpr.getType() == NodeType.ObjectLiteral) {
-            return environment.editObject();
-        }
+        // handling if the expression is an object property
         else if (assignedExpr.getType() == NodeType.MemberExpr) {
-            return environment.editProperty();
+            // idea: get the identifier from the object nad use assignvariable and just make a new objectvalue
+            // use recursive to go through the nested memberexprs
+            return new NullValue();
         }
         else {
             System.err.println("This expression cannot be assigned: " + assignedExpr);

@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import parser.Identifier;
+import parser.MemberExpr;
+import parser.NodeType;
+
 public class Environment {
     private Environment parent;
     private Map<String, RuntimeValue> variables; // keeps track of variables and their runtime values
@@ -35,7 +39,7 @@ public class Environment {
             for (RuntimeValue arg : args)
                 stringJoiner.add(arg.valueToString());
             System.out.println(stringJoiner.toString());
-            
+
             return new NullValue();
         }), true);
         declareVariable("tiempo", new Method((args, environment) -> {
@@ -43,9 +47,9 @@ public class Environment {
 
             return new StringValue(date);
         }), true);
-    
+
     }
-    
+
     // for the constructors we have one with no parent and one with a parent
 
     public Environment() {
@@ -60,12 +64,13 @@ public class Environment {
     public Environment getParent() {
         return parent;
     }
-    
+
     public Map<String, RuntimeValue> getVariables() {
         return variables;
     }
 
-    // to get the variable value we just need to find the scope with the variable and then get it from the map
+    // to get the variable value we just need to find the scope with the variable
+    // and then get it from the map
     public RuntimeValue getVariableValue(String identifier) {
         return resolveScope(identifier).getVariables().get(identifier);
     }
@@ -99,43 +104,35 @@ public class Environment {
         if (environment.getVariableValue(identifier) == null) {
             System.err.println(identifier + " not defined yet.");
         } else {
-            // to prevent endless loops we have to check if the environment is equal to itself
+            // to prevent endless loops we have to check if the environment is equal to
+            // itself
             if (environment == this) {
                 // if it is then we update the value
                 variables.put(identifier, value);
-            }
-            else {
-                // if it's not then we run the assign variable function on the environment with the variable
+            } else {
+                // if it's not then we run the assign variable function on the environment with
+                // the variable
                 environment.assignVariable(identifier, value);
             }
         }
 
         return value;
     }
-
-    // TODO: add mutability for objects and their properties
-    public RuntimeValue editObject() {
-
-        return new NullValue();
-    }
-
-    public RuntimeValue editProperty() {
-
-        return new NullValue();
-    }
-
+    
     public Environment resolveScope(String identifier) {
         // if the current environment has this variable then the scope is right
         if (variables.get(identifier) != null) {
             return this;
         }
 
-        // if there is no parent then the variable doesn't exist or it exists in a lower scope which cannot be accessed
+        // if there is no parent then the variable doesn't exist or it exists in a lower
+        // scope which cannot be accessed
         if (parent == null) {
             System.err.println("Cannot resolve " + identifier + ".");
         }
 
-        // if there is a parent then we want to check if the variable exists in the parent
+        // if there is a parent then we want to check if the variable exists in the
+        // parent
         return parent.resolveScope(identifier);
     }
 

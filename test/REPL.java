@@ -6,7 +6,6 @@ import parser.Program;
 import runtime.BooleanValue;
 import runtime.Environment;
 import runtime.NumberValue;
-import runtime.StringValue;
 
 public class REPL {
     public static void main(String[] args) {

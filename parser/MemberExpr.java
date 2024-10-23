@@ -18,6 +18,18 @@ public class MemberExpr extends Expr {
         this.computed = computed;
     }
 
+    public Expr getObject() {
+        return object;
+    }
+
+    public Expr getProperty() {
+        return property;
+    }
+
+    public boolean getComputed() {
+        return computed;
+    }
+
     public RuntimeValue evaluate(Environment environment) {
         RuntimeValue objectValue = object.evaluate(environment);
         if (objectValue.getType() != ValueType.Object) {

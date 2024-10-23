@@ -141,19 +141,20 @@ public class Parser {
                 if (property.getType() != NodeType.Identifier) {
                     System.err.println("Expected identifier after dot operator but instead received: " + property.getType());
                 }
-
-                // if there's a chain like foo.bar.baz
-                if (tokens.get(0).getType() == TokenType.Dot) {
-                    popLeft(); // gets rid of dot
-                    MemberExpr firstExpr = new MemberExpr(object, property, computed);
-                    return new MemberExpr(firstExpr, parsePrimaryExpr(), computed);
-                }
             }
             // foo[bar]
             else {
                 computed = true;
                 property = parseExpr();
                 popLeft(TokenType.CloseBracket, "Expected closing bracket after computed member call.");
+            }
+
+            System.out.println(tokens);
+            // if there's a chain like foo.bar.baz or foo.bar["baz"]
+            if (tokens.get(0).getType() == TokenType.Dot || tokens.get(0).getType() == TokenType.OpenBracket) {
+                popLeft(); // gets rid of dot / open bracket
+                MemberExpr firstExpr = new MemberExpr(object, property, computed);
+                return new MemberExpr(firstExpr, parsePrimaryExpr(), computed);
             }
 
             return new MemberExpr(object, property, computed);
