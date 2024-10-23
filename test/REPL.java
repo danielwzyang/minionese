@@ -27,7 +27,7 @@ public class REPL {
 
             if (src.equals("?")) {
                 globalEnvironment.getVariables().forEach((k, v) -> {
-                    System.out.println(k + ": " + v);
+                    System.out.println(k + ": " + v.valueToString());
                 });
                 continue;
             }

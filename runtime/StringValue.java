@@ -13,7 +13,7 @@ public class StringValue extends RuntimeValue {
     }
 
     public String valueToString() {
-        return "" + value;
+        return value;
     }
 
     public String toString() {
