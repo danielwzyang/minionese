@@ -1,6 +1,7 @@
 package parser;
 
 import runtime.Environment;
+import runtime.NullValue;
 import runtime.ObjectValue;
 import runtime.RuntimeValue;
 import runtime.StringValue;
@@ -33,7 +34,7 @@ public class MemberExpr extends Expr {
     public RuntimeValue evaluate(Environment environment) {
         RuntimeValue objectValue = object.evaluate(environment);
         if (objectValue.getType() != ValueType.Object) {
-            System.err.println("Unexpected member expression on non-object identifier.");
+            System.err.println("Unexpected member expression on non-object value.");
             System.exit(0);
         }
 
@@ -50,9 +51,15 @@ public class MemberExpr extends Expr {
             key = ((StringValue) propertyValue).getValue();
         } else {
             // if it wasn't computed then it has to be an identifier; if it isn't we already handled that error in parsing
-            key = ((Identifier) property).getSymbol();
+            key = ((Identifier) property).getName();
         }
 
-        return ((ObjectValue) objectValue).getPropertyValue(key);
+        RuntimeValue propertyRuntimeValue = ((ObjectValue) objectValue).getPropertyValue(key);
+        
+        if (propertyRuntimeValue == null) {
+            return new NullValue();
+        }
+
+        return propertyRuntimeValue;
     }
 }

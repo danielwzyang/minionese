@@ -1,8 +1,11 @@
 package parser;
 
+import runtime.ObjectValue;
 import runtime.Environment;
 import runtime.NullValue;
 import runtime.RuntimeValue;
+import runtime.StringValue;
+import runtime.ValueType;
 
 public class Assignment extends Expr {
     private Expr assignedExpr;
@@ -29,15 +32,26 @@ public class Assignment extends Expr {
     public RuntimeValue evaluate(Environment environment) {
         // here we're just handling if the assigned expression is an identifier
         if (assignedExpr.getType() == NodeType.Identifier) {
-            String symbol = ((Identifier) assignedExpr).getSymbol();
-
+            String symbol = ((Identifier) assignedExpr).getName();
             return environment.assignVariable(symbol, value.evaluate(environment));
         }
         // handling if the expression is an object property
         else if (assignedExpr.getType() == NodeType.MemberExpr) {
-            // idea: get the identifier from the object nad use assignvariable and just make a new objectvalue
-            // use recursive to go through the nested memberexprs
-            return new NullValue();
+            // gets the object that contains the property
+            RuntimeValue objectValue = ((MemberExpr) assignedExpr).getObject().evaluate(environment);
+
+            if (objectValue.getType() != ValueType.Object) {
+                System.err.println("Cannot assign property to non-object value. Attemping to assign property to " + objectValue.getType() + ".");
+                System.exit(0);
+            }
+
+            // gets the name of the property; if the property is a string then its the string value, if it's an identifier then its the name
+            Expr propertyExpr = ((MemberExpr) assignedExpr).getProperty();
+            String propertyValue;
+            if (propertyExpr.getType() == NodeType.Identifier) propertyValue = ((Identifier) propertyExpr).getName();
+            else propertyValue = ((StringLiteral) propertyExpr).getValue();
+
+            return ((ObjectValue) objectValue).addProperty(propertyValue, value.evaluate(environment));
         }
         else {
             System.err.println("This expression cannot be assigned: " + assignedExpr);

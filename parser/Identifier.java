@@ -11,7 +11,7 @@ public class Identifier extends Expr {
         this.symbol = symbol;
     }
 
-    public String getSymbol() {
+    public String getName() {
         return symbol;
     }
 

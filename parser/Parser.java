@@ -127,7 +127,7 @@ public class Parser {
     private Expr parseMemberExpr() {
         Expr object = parsePrimaryExpr();
 
-        // handles either foo.bar or foo["bar"]
+        // handles either foo.bar or foo["bar"]; while loop allows for chaining
         while (tokens.get(0).getType() == TokenType.Dot || tokens.get(0).getType() == TokenType.OpenBracket ) {
             Token operator = popLeft(); // gets either the dot or the bracket
             Expr property;
@@ -149,15 +149,7 @@ public class Parser {
                 popLeft(TokenType.CloseBracket, "Expected closing bracket after computed member call.");
             }
 
-            System.out.println(tokens);
-            // if there's a chain like foo.bar.baz or foo.bar["baz"]
-            if (tokens.get(0).getType() == TokenType.Dot || tokens.get(0).getType() == TokenType.OpenBracket) {
-                popLeft(); // gets rid of dot / open bracket
-                MemberExpr firstExpr = new MemberExpr(object, property, computed);
-                return new MemberExpr(firstExpr, parsePrimaryExpr(), computed);
-            }
-
-            return new MemberExpr(object, property, computed);
+            object = new MemberExpr(object, property, computed);
         }
 
         return object;

@@ -11,8 +11,9 @@ public class ObjectValue extends RuntimeValue {
         properties = new HashMap<>();
     }
 
-    public void addProperty(String key, RuntimeValue value) {
+    public RuntimeValue addProperty(String key, RuntimeValue value) {
         properties.put(key, value);
+        return value;
     }
 
     public RuntimeValue getPropertyValue(String key) {
@@ -20,7 +21,7 @@ public class ObjectValue extends RuntimeValue {
     }
 
     public String valueToString() {
-        return "Object";
+        return properties.toString();
     }
     
     public String toString() {
