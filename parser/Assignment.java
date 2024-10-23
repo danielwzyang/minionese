@@ -4,7 +4,6 @@ import runtime.ObjectValue;
 import runtime.Environment;
 import runtime.NullValue;
 import runtime.RuntimeValue;
-import runtime.StringValue;
 import runtime.ValueType;
 
 public class Assignment extends Expr {

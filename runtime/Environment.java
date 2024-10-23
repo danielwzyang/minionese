@@ -8,10 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import parser.Identifier;
-import parser.MemberExpr;
-import parser.NodeType;
-
 public class Environment {
     private Environment parent;
     private Map<String, RuntimeValue> variables; // keeps track of variables and their runtime values
@@ -42,6 +38,7 @@ public class Environment {
 
             return new NullValue();
         }), true);
+
         declareVariable("tiempo", new Method((args, environment) -> {
             String date = new SimpleDateFormat("MMMM d, yyyy").format(new Date());
 
