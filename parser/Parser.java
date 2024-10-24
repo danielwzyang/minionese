@@ -143,10 +143,38 @@ public class Parser {
                     System.err.println("Expected identifier after dot operator but instead received: " + property.getType());
                 }
             }
-            // foo[bar]
+            // foo[bar] or str[x] / str[x:y] / str[x:] / str[:y]
             else {
                 computed = true;
-                property = parseExpr();
+
+                // str[:y]
+                if (tokens.get(0).getType() == TokenType.Colon) {
+                    popLeft(); // pops colon
+                    object = new SpliceExpr(object, new NumericLiteral(0), parseExpr());
+                    popLeft(TokenType.CloseBracket, "Expected closing bracket after character retrieval from string.");
+                    continue;
+                }
+
+                property = parseExpr(); // either property of object or left bound for splice
+
+                // str[x:] or str[x:y]
+                if (tokens.get(0).getType() == TokenType.Colon) {
+                    popLeft(); // pops colon
+                    
+                    // str[x:]
+                    if (tokens.get(0).getType() == TokenType.CloseBracket) {
+                        popLeft(); // gets rid of closed bracket
+                        object = new SpliceExpr(object, property);
+                    }
+                    // str[x:y]
+                    else {
+                        object = new SpliceExpr(object, property, parseExpr());
+                        popLeft(TokenType.CloseBracket, "Expected closing bracket after splice expr.");
+                    }
+                    
+                    continue;
+                }
+
                 popLeft(TokenType.CloseBracket, "Expected closing bracket after computed member call.");
             }
 
@@ -187,6 +215,7 @@ public class Parser {
         return arguments.toArray(new Expr[0]);
     }
 
+    /*
     private Expr parseSplicingOrRetrievalExpr() {
         Expr value = parseCallOrMemberExpr();
 
@@ -208,10 +237,11 @@ public class Parser {
 
         return value;
     }
+    */
 
     private Expr parseExponentialExpr() {
         // we always call the function that's above in the order of precedence
-        Expr left = parseSplicingOrRetrievalExpr();
+        Expr left = parseCallOrMemberExpr();
 
         // basically keeps evaluating the expression and adding it to the right
         while (tokens.get(0).getValue().equals("^")) {

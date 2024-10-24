@@ -18,37 +18,26 @@ public class SpliceExpr extends Expr {
         this.rightBound = rightBound;
     }
 
+    public SpliceExpr(Expr string, Expr leftBound) {
+        super(NodeType.SpliceExpr);
+        this.string = string;
+        this.leftBound = leftBound;
+    }
+
     public RuntimeValue evaluate(Environment environment) {
         RuntimeValue value = string.evaluate(environment);
-        
+
         if (value.getType() != ValueType.String) {
             System.err.println("Cannot splice from a non-string expression. Expression provided: " + string);
             System.exit(0);
         }
 
-        RuntimeValue leftValue = leftBound.evaluate(environment);
-        RuntimeValue rightValue = rightBound.evaluate(environment);
+        StringValue stringValue = (StringValue) value;
 
-        if (leftValue.getType() != ValueType.Number || rightValue.getType() != ValueType.Number) {
-            System.err.println("Cannot splice with non-number indices.");
-            System.exit(0);
-        }
+        RuntimeValue left = leftBound.evaluate(environment);
+        RuntimeValue right = rightBound != null ? rightBound.evaluate(environment)
+                : new NumberValue(stringValue.getValue().length());
 
-        int left = (int) ((NumberValue) leftValue).getValue();
-        int right = (int) ((NumberValue) rightValue).getValue();
-
-        String stringValue = value.valueToString();
-
-        if (left < 0 || right >= stringValue.length()) {
-            System.err.println("Index out of bounds while splicing.");
-            System.exit(0);
-        }
-
-        if (left != ((NumberValue) leftValue).getValue() || right != ((NumberValue) rightValue).getValue()) {
-            System.err.println("Cannot splice with non-integer indices.");
-            System.exit(0);
-        }
-
-        return new StringValue(value.valueToString().substring(left, right));
+        return stringValue.splice(left, right, environment);
     }
 }
