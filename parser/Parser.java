@@ -77,13 +77,13 @@ public class Parser {
     /*
      * these go in order of precedence ( first to last )
      * primary
-     * call
-     * member
+     * call / member / splicing
      * splicing / retrieval
      * exponential (^)
      * multiplicative (*, /, %)
      * additive (+, -)
-     * comparitive (&, |, ==)
+     * equivalence (==)
+     * comparitive (&, |)
      * object
      * assignment (=)
      */
@@ -261,14 +261,26 @@ public class Parser {
         return left;
     }
 
-    private Expr parseComparitiveExpr() {
-        // the exact same as additive function just with comparitive operators
+    private Expr parseEquivalenceExpr() {
         Expr left = parseAdditiveExpr();
 
-        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|")
-                || tokens.get(0).getValue().equals("==")) {
+        while (tokens.get(0).getValue().equals("==")) {
             String operator = popLeft().getValue();
             Expr right = parseAdditiveExpr();
+
+            left = new BinaryExpr(left, right, operator);
+        }
+
+        return left;
+    }
+
+    private Expr parseComparitiveExpr() {
+        // the exact same as additive function just with comparitive operators
+        Expr left = parseEquivalenceExpr();
+
+        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|")) {
+            String operator = popLeft().getValue();
+            Expr right = parseEquivalenceExpr();
 
             left = new BinaryExpr(left, right, operator);
         }
