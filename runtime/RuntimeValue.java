@@ -15,7 +15,5 @@ public abstract class RuntimeValue {
         return "" + type;
     }
 
-    public abstract String valueToString();
-
     public abstract RuntimeValue operate(RuntimeValue right, String operator);
 }

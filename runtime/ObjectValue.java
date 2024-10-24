@@ -21,28 +21,7 @@ public class ObjectValue extends RuntimeValue {
         return properties.get(key);
     }
 
-    public String valueToString() {
-        if (properties.size() == 0) return "{}";
-
-        StringJoiner stringJoiner = new StringJoiner("\n");
-        stringJoiner.add("{");
-        for (String key : properties.keySet()) {
-            RuntimeValue value = properties.get(key);
-            StringBuilder valueString = new StringBuilder();
-            valueString.append("   ");
-            valueString.append(key);
-            valueString.append(": ");
-            if (value.getType() == ValueType.Object) valueString.append(((ObjectValue) value).valueToString(1));
-            else valueString.append(value.valueToString());
-
-            stringJoiner.add(valueString);
-        }
-        stringJoiner.add("}");
-
-        return stringJoiner.toString();
-    }
-
-    public String valueToString(int depth) {
+    private String depthString(int depth) {
         if (properties.size() == 0) return "{}";
 
         StringJoiner stringJoiner = new StringJoiner("\n");
@@ -53,8 +32,8 @@ public class ObjectValue extends RuntimeValue {
             for (int i = 0; i < depth; i++) valueString.append("   ");
             valueString.append(key);
             valueString.append(": ");
-            if (value.getType() == ValueType.Object) valueString.append(((ObjectValue) value).valueToString(depth + 1));
-            else valueString.append(value.valueToString());
+            if (value.getType() == ValueType.Object) valueString.append(((ObjectValue) value).depthString(depth + 1));
+            else valueString.append(value.toString());
 
             stringJoiner.add(valueString);
         }
@@ -67,7 +46,24 @@ public class ObjectValue extends RuntimeValue {
     }
     
     public String toString() {
-        return properties.toString();
+        if (properties.size() == 0) return "{}";
+
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        stringJoiner.add("{");
+        for (String key : properties.keySet()) {
+            RuntimeValue value = properties.get(key);
+            StringBuilder valueString = new StringBuilder();
+            valueString.append("   ");
+            valueString.append(key);
+            valueString.append(": ");
+            if (value.getType() == ValueType.Object) valueString.append(((ObjectValue) value).depthString(1));
+            else valueString.append(value.toString());
+
+            stringJoiner.add(valueString);
+        }
+        stringJoiner.add("}");
+
+        return stringJoiner.toString();
     }
 
     public RuntimeValue operate(RuntimeValue right, String operator) {

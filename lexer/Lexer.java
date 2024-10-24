@@ -14,6 +14,7 @@ public class Lexer {
         keywords = new HashMap<>();
         keywords.put("la", TokenType.Define);
         keywords.put("fin", TokenType.Final);
+        keywords.put("papoy", TokenType.If);
     }
 
     public List<Token> tokenize(String src) {

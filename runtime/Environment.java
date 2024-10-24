@@ -33,17 +33,17 @@ public class Environment {
         declareVariable("bello", new Method((args, environment) -> {
             StringJoiner stringJoiner = new StringJoiner(" ");
             for (RuntimeValue arg : args)
-                stringJoiner.add(arg.valueToString());
+                stringJoiner.add(arg.toString());
             System.out.println(stringJoiner.toString());
 
             return new NullValue();
-        }), true);
+        }, "prints given arguments"), true);
 
         declareVariable("tiempo", new Method((args, environment) -> {
             String date = new SimpleDateFormat("MMMM d, yyyy").format(new Date());
 
             return new StringValue(date);
-        }), true);
+        }, "returns string of current date"), true);
 
     }
 

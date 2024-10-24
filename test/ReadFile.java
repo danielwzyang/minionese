@@ -47,7 +47,7 @@ public class ReadFile {
 
                 if (src.equals("?")) {
                     globalEnvironment.getVariables().forEach((k, v) -> {
-                        System.out.println(k + ": " + v.valueToString());
+                        System.out.println(k + ": " + v.toString());
                     });
                     continue;
                 }

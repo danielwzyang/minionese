@@ -12,12 +12,8 @@ public class StringValue extends RuntimeValue {
         return value;
     }
 
-    public String valueToString() {
-        return value;
-    }
-
     public String toString() {
-        return "{ type: " + super.getType() + ", value: \"" + value + "\" }";
+        return value;
     }
 
     public RuntimeValue splice(RuntimeValue left, RuntimeValue right, Environment environment) {

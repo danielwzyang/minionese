@@ -5,6 +5,7 @@ public enum TokenType {
     Number,
     String,
     Define, Final,
+    If, While,
     Identifier,
     Equals,
     OpenP, CloseP,
