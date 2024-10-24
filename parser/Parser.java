@@ -215,30 +215,6 @@ public class Parser {
         return arguments.toArray(new Expr[0]);
     }
 
-    /*
-    private Expr parseSplicingOrRetrievalExpr() {
-        Expr value = parseCallOrMemberExpr();
-
-        // foo[3]
-        if (tokens.get(0).getType() == TokenType.OpenBracket) {
-            popLeft(); // gets rid of open bracket
-            Expr left = parseExpr(); // gets left (ex: foo[3:5]; gets the 3)
-            
-            if (tokens.get(0).getType() == TokenType.Colon) {
-                popLeft(); // gets rid of colon
-                Expr right = parseExpr(); // gets right (ex: foo[3:5] gets the 5)
-                popLeft(TokenType.CloseBracket, "Expected closing bracket after splicing/retrieval.");
-                return new SpliceExpr(value, left, right);
-            }
-
-            popLeft(TokenType.CloseBracket, "Expected closing bracket after splicing/retrieval.");
-            return new RetrievalExpr(value, left);
-        }
-
-        return value;
-    }
-    */
-
     private Expr parseExponentialExpr() {
         // we always call the function that's above in the order of precedence
         Expr left = parseCallOrMemberExpr();
