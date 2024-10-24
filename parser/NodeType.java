@@ -2,7 +2,7 @@ package parser;
 public enum NodeType {
     Program,
     NumericLiteral,
-    StringLiteral,
+    StringLiteral, SpliceExpr,
     Identifier,
     BinaryExpr,
     Declaration, Assignment,
