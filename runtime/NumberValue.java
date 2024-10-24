@@ -44,6 +44,14 @@ public class NumberValue extends RuntimeValue {
                         return new NumberValue(Math.pow(value, rightDouble));
                     case "==":
                         return new BooleanValue(value == rightDouble);
+                    case "<":
+                        return new BooleanValue(value < rightDouble);
+                    case "<=":
+                        return new BooleanValue(value <= rightDouble);
+                    case ">":
+                        return new BooleanValue(value > rightDouble);
+                    case ">=":
+                        return new BooleanValue(value >= rightDouble);
                     default:
                         System.err.println("The operation " + operator + " isn't supported between two Numbers.");
                         System.exit(0);
@@ -57,7 +65,9 @@ public class NumberValue extends RuntimeValue {
                         return new StringValue(value + rightString);
                     case "*":
                         if (value <= 0 || (int) value != value) {
-                            System.err.println("Can only multiply strings by positive non-zero integers. Invalid number: " + value);
+                            System.err
+                                    .println("Can only multiply strings by positive non-zero integers. Invalid number: "
+                                            + value);
                             System.exit(0);
                         }
 
@@ -68,7 +78,8 @@ public class NumberValue extends RuntimeValue {
 
                         return new StringValue(multipliedString.toString());
                     default:
-                        System.err.println("The operation " + operator + " isn't supported between a Number and a String.");
+                        System.err.println(
+                                "The operation " + operator + " isn't supported between a Number and a String.");
                         System.exit(0);
                         return new NullValue();
                 }

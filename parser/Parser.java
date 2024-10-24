@@ -83,7 +83,7 @@ public class Parser {
      * multiplicative (*, /, %)
      * additive (+, -)
      * equivalence (==)
-     * comparitive (&, |)
+     * comparitive (&, |, >, <, >=, <=)
      * object
      * assignment (=)
      */
@@ -129,7 +129,7 @@ public class Parser {
         Expr object = parsePrimaryExpr();
 
         // handles either foo.bar or foo["bar"]; while loop allows for chaining
-        while (tokens.get(0).getType() == TokenType.Dot || tokens.get(0).getType() == TokenType.OpenBracket ) {
+        while (tokens.get(0).getType() == TokenType.Dot || tokens.get(0).getType() == TokenType.OpenBracket) {
             Token operator = popLeft(); // gets either the dot or the bracket
             Expr property;
             boolean computed;
@@ -140,7 +140,8 @@ public class Parser {
                 property = parsePrimaryExpr(); // identifier gets parsed as a primary expr
 
                 if (property.getType() != NodeType.Identifier) {
-                    System.err.println("Expected identifier after dot operator but instead received: " + property.getType());
+                    System.err.println(
+                            "Expected identifier after dot operator but instead received: " + property.getType());
                 }
             }
             // foo[bar] or str[x] / str[x:y] / str[x:] / str[:y]
@@ -160,7 +161,7 @@ public class Parser {
                 // str[x:] or str[x:y]
                 if (tokens.get(0).getType() == TokenType.Colon) {
                     popLeft(); // pops colon
-                    
+
                     // str[x:]
                     if (tokens.get(0).getType() == TokenType.CloseBracket) {
                         popLeft(); // gets rid of closed bracket
@@ -171,7 +172,7 @@ public class Parser {
                         object = new SpliceExpr(object, property, parseExpr());
                         popLeft(TokenType.CloseBracket, "Expected closing bracket after splice expr.");
                     }
-                    
+
                     continue;
                 }
 
@@ -210,7 +211,7 @@ public class Parser {
             popLeft(); // gets rid of comma
             arguments.add(parseExpr());
         }
-        
+
         popLeft(TokenType.CloseP, "Expected closing parentheses after function call.");
         return arguments.toArray(new Expr[0]);
     }
@@ -278,10 +279,11 @@ public class Parser {
         // the exact same as additive function just with comparitive operators
         Expr left = parseEquivalenceExpr();
 
-        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|")) {
+        while (tokens.get(0).getValue().equals("&") || tokens.get(0).getValue().equals("|")
+                || tokens.get(0).getValue().equals("<") || tokens.get(0).getValue().equals("<=")
+                || tokens.get(0).getValue().equals(">") || tokens.get(0).getValue().equals(">=")) {
             String operator = popLeft().getValue();
             Expr right = parseEquivalenceExpr();
-
             left = new BinaryExpr(left, right, operator);
         }
 
