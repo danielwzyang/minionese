@@ -45,6 +45,19 @@ public class Environment {
             return new StringValue(date);
         }, "returns string of current date"), true);
 
+        declareVariable("sqrt", new Method((args, environment) -> {
+            if (args.length == 0) {
+                System.err.println("No arguments provided for sqrt function.");
+                System.exit(0);
+            }
+
+            if (args[0].getType() != ValueType.Number) {
+                System.err.println("The argument provided for sqrt function is not a number.");
+                System.exit(0);
+            }
+
+            return new NumberValue(Math.sqrt(((NumberValue) args[0]).getValue()));
+        }, "returns string of current date"), true);
     }
 
     // for the constructors we have one with no parent and one with a parent

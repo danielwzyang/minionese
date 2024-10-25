@@ -38,12 +38,20 @@ public class NumberValue extends RuntimeValue {
                             System.exit(0);
                         }
                         return new NumberValue(value / rightDouble);
+                    case "//":
+                        if (rightDouble == 0) {
+                            System.err.println("Error: dividing by zero.");
+                            System.exit(0);
+                        }
+                        return new NumberValue((int) (value / rightDouble));
                     case "%":
                         return new NumberValue(value % rightDouble);
                     case "^":
                         return new NumberValue(Math.pow(value, rightDouble));
                     case "==":
                         return new BooleanValue(value == rightDouble);
+                    case "!=":
+                        return new BooleanValue(value != rightDouble);
                     case "<":
                         return new BooleanValue(value < rightDouble);
                     case "<=":

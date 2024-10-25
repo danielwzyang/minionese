@@ -67,6 +67,8 @@ public class ObjectValue extends RuntimeValue {
     }
 
     public RuntimeValue operate(RuntimeValue right, String operator) {
+        System.err.println("Binary operators are not supported with objects.");
+        System.exit(0);
         return new NullValue();
     }
 }

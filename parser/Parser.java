@@ -240,8 +240,8 @@ public class Parser {
         // the exact same as the exponential function just with multiplicative operators
         Expr left = parseExponentialExpr();
 
-        while (tokens.get(0).getValue().equals("/") || tokens.get(0).getValue().equals("*")
-                || tokens.get(0).getValue().equals("%")) {
+        while (tokens.get(0).getValue().equals("/") || tokens.get(0).getValue().equals("//") ||
+                tokens.get(0).getValue().equals("*") || tokens.get(0).getValue().equals("%")) {
             String operator = popLeft().getValue();
             Expr right = parseExponentialExpr();
 
