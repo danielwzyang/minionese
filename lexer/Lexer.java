@@ -1,6 +1,5 @@
 package lexer;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +16,8 @@ public class Lexer {
         keywords.put("papoy", TokenType.If);
     }
 
-    public List<Token> tokenize(String src) {
-        List<Token> tokens = new ArrayList<Token>();
+    public ArrayList<Token> tokenize(String src) {
+        ArrayList<Token> tokens = new ArrayList<Token>();
 
         // set of named capturing groups
         String patterns = "(?<Number>-?\\d+(\\.\\d*)?)" +
@@ -26,8 +25,8 @@ public class Lexer {
                 "|(?<Quote>\")" +
                 "|(?<OpenP>\\()" +
                 "|(?<CloseP>\\))" +
+                "|(?<Assignment>\\+=|\\*=|/=|=)" +
                 "|(?<BinOp>==|\\<=|\\>=|\\<|\\>|[+\\-*/%\\^&\\|])" +
-                "|(?<Equals>=)" +
                 "|(?<Whitespace>[ \\t]+)" +
                 "|(?<OpenBrace>\\{)" +
                 "|(?<CloseBrace>\\})" +
@@ -52,8 +51,7 @@ public class Lexer {
                     tokens.add(new Token(string.toString(), TokenType.String));
                     string.setLength(0);
                 }
-            }
-            else if (stringOpen)
+            } else if (stringOpen)
                 string.append(matcher.group());
             else if (matcher.group("Whitespace") != null)
                 continue;
@@ -65,10 +63,10 @@ public class Lexer {
                 // if the identifier is in the keywords, then we use the type that's stored
                 // ex: identifier = "la", which is the define type not the identifier type
                 tokens.add(new Token(matcher.group("Identifier"), type == null ? TokenType.Identifier : type));
-            } else if (matcher.group("BinOp") != null)
+            } else if (matcher.group("Assignment") != null)
+                tokens.add(new Token(matcher.group("Assignment"), TokenType.Assignment));
+            else if (matcher.group("BinOp") != null)
                 tokens.add(new Token(matcher.group("BinOp"), TokenType.BinOp));
-            else if (matcher.group("Equals") != null)
-                tokens.add(new Token(matcher.group("Equals"), TokenType.Equals));
             else if (matcher.group("OpenP") != null)
                 tokens.add(new Token(matcher.group("OpenP"), TokenType.OpenP));
             else if (matcher.group("CloseP") != null)

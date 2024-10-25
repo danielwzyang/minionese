@@ -1,6 +1,5 @@
 package parser;
 
-import java.util.List;
 import java.util.ArrayList;
 
 import lexer.Lexer;
@@ -8,7 +7,7 @@ import lexer.Token;
 import lexer.TokenType;
 
 public class Parser {
-    private List<Token> tokens;
+    private ArrayList<Token> tokens;
 
     private Token popLeft() {
         return tokens.removeFirst();
@@ -55,7 +54,7 @@ public class Parser {
         String identifier = popLeft(TokenType.Identifier, "Identifier expected.").getValue();
 
         // if there's no value provided
-        if (tokens.get(0).getType() != TokenType.Equals) {
+        if (tokens.get(0).getType() != TokenType.Assignment) {
             // if the token is final then this doesn't work since we can't define a final
             // with no value
             if (isFinal) {
@@ -66,7 +65,11 @@ public class Parser {
             return new Declaration(identifier, isFinal);
         }
 
-        popLeft(); // pops equal sign
+        String sign = popLeft().getValue(); // pops equal sign
+        if (!sign.equals("=")) {
+            System.err.println("Expected equals sign for declaration.");
+            System.exit(0);
+        }
 
         // after the equals sign is the expression for the value
         Declaration declaration = new Declaration(identifier, isFinal, parseExpr());
@@ -204,7 +207,7 @@ public class Parser {
             return new Expr[0];
         }
 
-        List<Expr> arguments = new ArrayList<Expr>();
+        ArrayList<Expr> arguments = new ArrayList<Expr>();
         arguments.add(parseExpr()); // parses first argument so we're on the comma now
 
         while (tokens.get(0).getType() == TokenType.Comma) {
@@ -296,7 +299,7 @@ public class Parser {
             return parseComparitiveExpr();
 
         popLeft(); // pops open brace
-        List<Property> properties = new ArrayList<Property>();
+        ArrayList<Property> properties = new ArrayList<Property>();
 
         // we want to keep fetching the properties until we reach the close bracket or
         // the end of file
@@ -337,12 +340,19 @@ public class Parser {
         // gets the expression that we're assigning
         Expr left = parseObject();
 
-        while (tokens.get(0).getType() == TokenType.Equals) {
-            popLeft(); // pop the equals sign
-            Expr value = parseAssignment(); // evaluate the rigth hand side
+        while (tokens.get(0).getType() == TokenType.Assignment) {
+            String sign = popLeft().getValue(); // pop the assignment sign
+            Expr value = parseAssignment(); // evaluate the right hand side
 
-            // returns assignment to allow chains like x = y = z
-            left = new Assignment(left, value);
+            if (sign.equals("=")) {
+                // sets left to assignment to allow chains like x = y = z
+                left = new Assignment(left, value);
+            } else {
+                // += -> left = left + value
+                // *= -> left = left * value
+                // /= -> left = left / value
+                left = new Assignment(left, new BinaryExpr(left, value, sign.substring(0, 1)));
+            }
         }
 
         return left;

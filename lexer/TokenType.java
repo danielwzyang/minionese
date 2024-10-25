@@ -7,7 +7,7 @@ public enum TokenType {
     Define, Final,
     If, While,
     Identifier,
-    Equals,
+    Assignment,
     OpenP, CloseP,
     OpenBrace, CloseBrace,
     OpenBracket, CloseBracket,
