@@ -5,6 +5,8 @@ public enum TokenType {
     Number,
     String,
     Define, Final,
+    Equivalence, BinOp,
+    Increment, Negation,
     If, While,
     Identifier,
     Assignment,
@@ -12,5 +14,4 @@ public enum TokenType {
     OpenBrace, CloseBrace,
     OpenBracket, CloseBracket,
     Comma, Colon, Dot,
-    BinOp,
 }

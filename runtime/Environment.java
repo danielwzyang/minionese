@@ -57,7 +57,7 @@ public class Environment {
             }
 
             return new NumberValue(Math.sqrt(((NumberValue) args[0]).getValue()));
-        }, "returns string of current date"), true);
+        }, "returns square root of given number"), true);
     }
 
     // for the constructors we have one with no parent and one with a parent

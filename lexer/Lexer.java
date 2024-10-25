@@ -20,13 +20,17 @@ public class Lexer {
         ArrayList<Token> tokens = new ArrayList<Token>();
 
         // set of named capturing groups
+        // the order of the groups matters: the groups that are defined first are
         String patterns = "(?<Number>-?\\d+(\\.\\d*)?)" +
                 "|(?<Identifier>[a-zA-Z_][\\w]*)" +
                 "|(?<Quote>\")" +
                 "|(?<OpenP>\\()" +
                 "|(?<CloseP>\\))" +
+                "|(?<Equivalence>!=|==)" +
                 "|(?<Assignment>\\+=|-=|\\*=|/=|//=|\\^=|%=|=)" +
-                "|(?<BinOp>==|\\<=|\\>=|\\<|\\>|//|[+\\-*/%\\^&\\|])" +
+                "|(?<Negation>!)" +
+                "|(?<Increment>\\+\\+|--)" +
+                "|(?<BinOp>\\<=|\\>=|\\<|\\>|//|[+\\-*/%\\^&\\|])" +
                 "|(?<Whitespace>[ \\t]+)" +
                 "|(?<OpenBrace>\\{)" +
                 "|(?<CloseBrace>\\})" +
@@ -65,8 +69,14 @@ public class Lexer {
                 tokens.add(new Token(matcher.group("Identifier"), type == null ? TokenType.Identifier : type));
             } else if (matcher.group("Assignment") != null)
                 tokens.add(new Token(matcher.group("Assignment"), TokenType.Assignment));
+            else if (matcher.group("Increment") != null)
+                tokens.add(new Token(matcher.group("Increment"), TokenType.Increment));
+            else if (matcher.group("Negation") != null)
+                tokens.add(new Token(matcher.group("Negation"), TokenType.Negation));
             else if (matcher.group("BinOp") != null)
                 tokens.add(new Token(matcher.group("BinOp"), TokenType.BinOp));
+            else if (matcher.group("Equivalence") != null)
+                tokens.add(new Token(matcher.group("Equivalence"), TokenType.Equivalence));
             else if (matcher.group("OpenP") != null)
                 tokens.add(new Token(matcher.group("OpenP"), TokenType.OpenP));
             else if (matcher.group("CloseP") != null)

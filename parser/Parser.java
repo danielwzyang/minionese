@@ -82,11 +82,13 @@ public class Parser {
      * primary
      * call / member / splicing
      * splicing / retrieval
+     * increment operations (++, --)
      * exponential (^)
      * multiplicative (*, /, %)
      * additive (+, -)
      * equivalence (==)
      * comparitive (&, |, >, <, >=, <=)
+     * negation operation (!)
      * object
      * assignment (=)
      */
@@ -219,16 +221,27 @@ public class Parser {
         return arguments.toArray(new Expr[0]);
     }
 
+    private Expr parseIncrementExpr() {
+        // postfix unary operations (x++, x--)
+        Expr left = parseCallOrMemberExpr();
+        if (tokens.get(0).getType() == TokenType.Increment) {
+            String operator = popLeft().getValue();
+            return new UnaryExpr(operator, left);
+        }
+
+        return left;
+    }
+
     private Expr parseExponentialExpr() {
         // we always call the function that's above in the order of precedence
-        Expr left = parseCallOrMemberExpr();
+        Expr left = parseIncrementExpr();
 
         // basically keeps evaluating the expression and adding it to the right
         while (tokens.get(0).getValue().equals("^")) {
             // now we hit the operator so we want to pop that token
             String operator = popLeft().getValue();
             // the next token is the next expression
-            Expr right = parseCallOrMemberExpr();
+            Expr right = parseIncrementExpr();
 
             left = new BinaryExpr(left, right, operator);
         }
@@ -268,7 +281,7 @@ public class Parser {
     private Expr parseEquivalenceExpr() {
         Expr left = parseAdditiveExpr();
 
-        while (tokens.get(0).getValue().equals("==")) {
+        while (tokens.get(0).getType() == TokenType.Equivalence) {
             String operator = popLeft().getValue();
             Expr right = parseAdditiveExpr();
 
@@ -293,10 +306,20 @@ public class Parser {
         return left;
     }
 
+    private Expr parseNegationExpr() {
+        // !x
+        if (tokens.get(0).getType() == TokenType.Negation) {
+            String operator = popLeft().getValue();
+            return new UnaryExpr(operator, parseComparitiveExpr());
+        }
+
+        return parseComparitiveExpr();
+    }
+
     private Expr parseObject() {
         // if we're not at an open brace then we continue up the order of precedence
         if (tokens.get(0).getType() != TokenType.OpenBrace)
-            return parseComparitiveExpr();
+            return parseNegationExpr();
 
         popLeft(); // pops open brace
         ArrayList<Property> properties = new ArrayList<Property>();
