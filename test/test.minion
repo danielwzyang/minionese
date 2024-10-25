@@ -1,10 +1,10 @@
-la foo = "fooooo"
-
-la poop = {
-    x: 100,
-    y: -32,
-    foo,
-    bar: {
-        baz: da
-    }
+la person = {
+    name: "eric",
+    age: 16
 }
+
+willy person.age < 18 {
+    person.age++
+}
+
+bello(person)

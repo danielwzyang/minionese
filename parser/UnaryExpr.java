@@ -26,17 +26,9 @@ public class UnaryExpr extends Expr {
                 }
                 return new BooleanValue(!((BooleanValue) exprValue).getValue());
             case "++":
-                if (expr.getType() != NodeType.Identifier) {
-                    System.err.println("Expected identiifer after ++ operator.");
-                    System.exit(0);
-                }
                 Assignment incrementedValue = new Assignment(expr, new BinaryExpr(expr, new NumericLiteral(1), "+"));
                 return incrementedValue.evaluate(environment);
             case "--":
-                if (expr.getType() != NodeType.Identifier) {
-                    System.err.println("Expected identiifer after ++ operator.");
-                    System.exit(0);
-                }
                 Assignment decrementedValue = new Assignment(expr, new BinaryExpr(expr, new NumericLiteral(1), "-"));
                 return decrementedValue.evaluate(environment);
             default:

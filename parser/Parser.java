@@ -1,5 +1,6 @@
 package parser;
 
+import java.net.Socket;
 import java.util.ArrayList;
 
 import lexer.Lexer;
@@ -44,6 +45,10 @@ public class Parser {
                 return parseDeclaration();
             case TokenType.Final:
                 return parseDeclaration();
+            case TokenType.If:
+                return parseConditional();
+            case TokenType.While:
+                return parseConditional();
             default:
                 return parseExpr();
         }
@@ -82,13 +87,12 @@ public class Parser {
      * primary
      * call / member / splicing
      * splicing / retrieval
-     * increment operations (++, --)
+     * increment operations (++, --) / negation operation (!)
      * exponential (^)
      * multiplicative (*, /, %)
      * additive (+, -)
      * equivalence (==)
      * comparitive (&, |, >, <, >=, <=)
-     * negation operation (!)
      * object
      * assignment (=)
      */
@@ -232,16 +236,26 @@ public class Parser {
         return left;
     }
 
+    private Expr parseNegationExpr() {
+        // !x
+        if (tokens.get(0).getType() == TokenType.Negation) {
+            String operator = popLeft().getValue();
+            return new UnaryExpr(operator, parseExpr());
+        }
+
+        return parseIncrementExpr();
+    }
+
     private Expr parseExponentialExpr() {
         // we always call the function that's above in the order of precedence
-        Expr left = parseIncrementExpr();
+        Expr left = parseNegationExpr();
 
         // basically keeps evaluating the expression and adding it to the right
         while (tokens.get(0).getValue().equals("^")) {
             // now we hit the operator so we want to pop that token
             String operator = popLeft().getValue();
             // the next token is the next expression
-            Expr right = parseIncrementExpr();
+            Expr right = parseNegationExpr();
 
             left = new BinaryExpr(left, right, operator);
         }
@@ -306,20 +320,10 @@ public class Parser {
         return left;
     }
 
-    private Expr parseNegationExpr() {
-        // !x
-        if (tokens.get(0).getType() == TokenType.Negation) {
-            String operator = popLeft().getValue();
-            return new UnaryExpr(operator, parseComparitiveExpr());
-        }
-
-        return parseComparitiveExpr();
-    }
-
     private Expr parseObject() {
         // if we're not at an open brace then we continue up the order of precedence
         if (tokens.get(0).getType() != TokenType.OpenBrace)
-            return parseNegationExpr();
+            return parseComparitiveExpr();
 
         popLeft(); // pops open brace
         ArrayList<Property> properties = new ArrayList<Property>();
@@ -379,5 +383,36 @@ public class Parser {
         }
 
         return left;
+    }
+
+    private Stmt parseConditional() {
+        Token identifier = popLeft(); // gets rid of if / while identifier
+        Expr condition = parseExpr(); // evals condition
+        ArrayList<Stmt> body = new ArrayList<>();
+
+        // if { ... } (multiple statements)
+        if (tokens.get(0).getType() == TokenType.OpenBrace) {
+            popLeft(); // gets rid of open brace
+            while (tokens.get(0).getType() != TokenType.CloseBrace) {
+                if (tokens.get(0).getType() == TokenType.EOF) {
+                    System.err.println("Closing brace expected to close if statement.");
+                    System.exit(0);
+                }
+
+                body.add(parseStatement());
+            }
+
+            popLeft(); // gets rid of closed brace
+        } else {
+            // if ... (one statement)
+            if (tokens.get(0).getType() == TokenType.EOF) {
+                System.err.println("Statement expected after condition for if statement.");
+                System.exit(0);
+            }
+            
+            body.add(parseStatement());
+        }
+
+        return identifier.getType() == TokenType.If ? new IfStmt(condition, body) : new WhileStmt(condition, body);
     }
 }

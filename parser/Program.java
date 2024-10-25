@@ -1,19 +1,20 @@
 package parser;
-import java.util.Vector;
+
+import java.util.ArrayList;
 
 import runtime.Environment;
 import runtime.NullValue;
 import runtime.RuntimeValue;
 
 public class Program extends Stmt {
-    private Vector<Stmt> body;
+    private ArrayList<Stmt> body;
 
     public Program() {
         super(NodeType.Program);
-        this.body = new Vector<>();
+        this.body = new ArrayList<>();
     }
 
-    public Vector<Stmt> getBody() {
+    public ArrayList<Stmt> getBody() {
         return body;
     }
 

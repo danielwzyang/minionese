@@ -13,7 +13,8 @@ public class Lexer {
         keywords = new HashMap<>();
         keywords.put("la", TokenType.Define);
         keywords.put("fin", TokenType.Final);
-        keywords.put("papoy", TokenType.If);
+        keywords.put("if", TokenType.If);
+        keywords.put("willy", TokenType.While);
     }
 
     public ArrayList<Token> tokenize(String src) {
@@ -21,27 +22,28 @@ public class Lexer {
 
         // set of named capturing groups
         // the order of the groups matters: the groups that are defined first are
-        String patterns = "(?<Number>-?\\d+(\\.\\d*)?)" +
-                "|(?<Identifier>[a-zA-Z_][\\w]*)" +
-                "|(?<Quote>\")" +
-                "|(?<OpenP>\\()" +
-                "|(?<CloseP>\\))" +
-                "|(?<Equivalence>!=|==)" +
-                "|(?<Assignment>\\+=|-=|\\*=|/=|//=|\\^=|%=|=)" +
-                "|(?<Negation>!)" +
-                "|(?<Increment>\\+\\+|--)" +
-                "|(?<BinOp>\\<=|\\>=|\\<|\\>|//|[+\\-*/%\\^&\\|])" +
-                "|(?<Whitespace>[ \\t]+)" +
-                "|(?<OpenBrace>\\{)" +
-                "|(?<CloseBrace>\\})" +
-                "|(?<OpenBracket>\\[)" +
-                "|(?<CloseBracket>\\])" +
-                "|(?<Comma>,)" +
-                "|(?<Colon>:)" +
-                "|(?<Dot>\\.)" +
-                "|(?<String>[.\n])";
+        StringBuilder patterns = new StringBuilder();
+        patterns.append("(?<Number>-?\\d+(\\.\\d*)?)");
+        patterns.append("|(?<Identifier>[a-zA-Z_][\\w]*)");
+        patterns.append("|(?<Quote>\")");
+        patterns.append("|(?<OpenP>\\()");
+        patterns.append("|(?<CloseP>\\))");
+        patterns.append("|(?<Equivalence>!=|==)");
+        patterns.append("|(?<Assignment>\\+=|-=|\\*=|/=|//=|\\^=|%=|=)");
+        patterns.append("|(?<Negation>!)");
+        patterns.append("|(?<Increment>\\+\\+|--)");
+        patterns.append("|(?<BinOp>\\<=|\\>=|\\<|\\>|//|[+\\-*/%\\^&\\|])");
+        patterns.append("|(?<Whitespace>[ \\t]+)");
+        patterns.append("|(?<OpenBrace>\\{)");
+        patterns.append("|(?<CloseBrace>\\})");
+        patterns.append("|(?<OpenBracket>\\[)");
+        patterns.append("|(?<CloseBracket>\\])");
+        patterns.append("|(?<Comma>,)");
+        patterns.append("|(?<Colon>:)");
+        patterns.append("|(?<Dot>\\.)");
+        patterns.append("|(?<String>[.\n])");
 
-        Pattern pattern = Pattern.compile(patterns);
+        Pattern pattern = Pattern.compile(patterns.toString());
         Matcher matcher = pattern.matcher(src);
 
         boolean stringOpen = false;
