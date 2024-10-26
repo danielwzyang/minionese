@@ -1,7 +1,7 @@
 package parser;
 public enum NodeType {
     Program, UserMethod, 
-    If, While,
+    If, While, For,
     NumericLiteral,
     StringLiteral, SpliceExpr,
     Identifier,

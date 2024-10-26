@@ -15,6 +15,7 @@ public class Lexer {
         keywords.put("fin", TokenType.Final);
         keywords.put("if", TokenType.If);
         keywords.put("willy", TokenType.While);
+        keywords.put("para", TokenType.For);
     }
 
     public ArrayList<Token> tokenize(String src) {

@@ -1,6 +1,5 @@
 package parser;
 
-import java.net.Socket;
 import java.util.ArrayList;
 
 import lexer.Lexer;
@@ -49,6 +48,8 @@ public class Parser {
                 return parseConditional();
             case TokenType.While:
                 return parseConditional();
+            case TokenType.For:
+                return parseFor();
             default:
                 return parseExpr();
         }
@@ -80,6 +81,74 @@ public class Parser {
         Declaration declaration = new Declaration(identifier, isFinal, parseExpr());
 
         return declaration;
+    }
+
+    private Stmt parseConditional() {
+        Token identifier = popLeft(); // gets rid of if / while identifier
+        Expr condition = parseExpr(); // evals condition
+        ArrayList<Stmt> body = new ArrayList<>();
+
+        // if { ... } (multiple statements)
+        if (tokens.get(0).getType() == TokenType.OpenBrace) {
+            popLeft(); // gets rid of open brace
+            while (tokens.get(0).getType() != TokenType.CloseBrace) {
+                if (tokens.get(0).getType() == TokenType.EOF) {
+                    System.err.println("Closing brace expected to close if statement.");
+                    System.exit(0);
+                }
+
+                body.add(parseStatement());
+            }
+
+            popLeft(); // gets rid of closed brace
+        } else {
+            // if ... (one statement)
+            if (tokens.get(0).getType() == TokenType.EOF) {
+                System.err.println("Statement expected after condition for if statement.");
+                System.exit(0);
+            }
+            
+            body.add(parseStatement());
+        }
+
+        return identifier.getType() == TokenType.If ? new IfStmt(condition, body) : new WhileStmt(condition, body);
+    }
+
+    private Stmt parseFor() {
+        // format: for i 3:10
+        popLeft(); // pops for loop identifier
+        String identifier = popLeft(TokenType.Identifier, "Identifier expected after for loop.").getValue();
+        Expr left = parseExpr();
+        popLeft(TokenType.Colon, "Colon expected after left bound in for loop.");
+        Expr right = parseExpr();
+
+        ArrayList<Stmt> body = new ArrayList<>();
+        // for i 3:10 { ... }
+        if (tokens.get(0).getType() == TokenType.OpenBrace) {
+            popLeft(); // gets rid of open brace
+
+            while (tokens.get(0).getType() != TokenType.CloseBrace) {
+                if (tokens.get(0).getType() == TokenType.EOF) {
+                    System.err.println("Closing brace expected to close if statement.");
+                    System.exit(0);
+                }
+
+                body.add(parseStatement());
+            }
+
+            popLeft(); // pops close brace
+        } else {
+            // for i 3:10 ...
+            
+            if (tokens.get(0).getType() == TokenType.EOF) {
+                System.err.println("Statement expected after condition for if statement.");
+                System.exit(0);
+            }
+            
+            body.add(parseStatement());
+        }
+
+        return new ForStmt(new Identifier(identifier), left, right, body);
     }
 
     /*
@@ -369,7 +438,7 @@ public class Parser {
 
         while (tokens.get(0).getType() == TokenType.Assignment) {
             String sign = popLeft().getValue(); // pop the assignment sign
-            Expr value = parseAssignment(); // evaluate the right hand side
+            Expr value = parseExpr(); // evaluate the right hand side
 
             if (sign.equals("=")) {
                 // sets left to assignment to allow chains like x = y = z
@@ -383,36 +452,5 @@ public class Parser {
         }
 
         return left;
-    }
-
-    private Stmt parseConditional() {
-        Token identifier = popLeft(); // gets rid of if / while identifier
-        Expr condition = parseExpr(); // evals condition
-        ArrayList<Stmt> body = new ArrayList<>();
-
-        // if { ... } (multiple statements)
-        if (tokens.get(0).getType() == TokenType.OpenBrace) {
-            popLeft(); // gets rid of open brace
-            while (tokens.get(0).getType() != TokenType.CloseBrace) {
-                if (tokens.get(0).getType() == TokenType.EOF) {
-                    System.err.println("Closing brace expected to close if statement.");
-                    System.exit(0);
-                }
-
-                body.add(parseStatement());
-            }
-
-            popLeft(); // gets rid of closed brace
-        } else {
-            // if ... (one statement)
-            if (tokens.get(0).getType() == TokenType.EOF) {
-                System.err.println("Statement expected after condition for if statement.");
-                System.exit(0);
-            }
-            
-            body.add(parseStatement());
-        }
-
-        return identifier.getType() == TokenType.If ? new IfStmt(condition, body) : new WhileStmt(condition, body);
     }
 }

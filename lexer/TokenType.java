@@ -7,7 +7,7 @@ public enum TokenType {
     Define, Final,
     Equivalence, BinOp,
     Increment, Negation,
-    If, While,
+    If, While, For,
     Identifier,
     Assignment,
     OpenP, CloseP,
