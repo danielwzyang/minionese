@@ -118,8 +118,17 @@ public class Parser {
         // format: for i 3:10
         popLeft(); // pops for loop identifier
         String identifier = popLeft(TokenType.Identifier, "Identifier expected after for loop.").getValue();
-        Expr left = parseExpr();
-        popLeft(TokenType.Colon, "Colon expected after left bound in for loop.");
+        
+        Expr left;
+        // no left bound provided; ex: para i :10
+        if (tokens.get(0).getType() == TokenType.Colon) {
+            popLeft(); // gets rid of colon
+            left = new NumericLiteral(0);
+        } else {
+            left = parseExpr();
+            popLeft(TokenType.Colon, "Colon expected after left bound in for loop.");
+        }
+        
         Expr right = parseExpr();
 
         ArrayList<Stmt> body = new ArrayList<>();

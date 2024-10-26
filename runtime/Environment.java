@@ -58,6 +58,20 @@ public class Environment {
 
             return new NumberValue(Math.sqrt(((NumberValue) args[0]).getValue()));
         }, "returns square root of given number"), true);
+
+        declareVariable("len", new Method((args, environment) -> {
+            if (args.length == 0) {
+                System.err.println("No arguments provided for length function.");
+                System.exit(0);
+            }
+
+            if (args[0].getType() != ValueType.String) {
+                System.err.println("The argument provided for length function is not a String.");
+                System.exit(0);
+            }
+
+            return new NumberValue(((StringValue) args[0]).getValue().length());
+        }, "returns length of string"), true);
     }
 
     // for the constructors we have one with no parent and one with a parent
