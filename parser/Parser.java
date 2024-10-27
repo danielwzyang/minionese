@@ -260,6 +260,7 @@ public class Parser {
                 if (property.getType() != NodeType.Identifier) {
                     System.err.println(
                             "Expected identifier after dot operator but instead received: " + property.getType());
+                    System.exit(0);
                 }
             }
             // foo[bar] or str[x] / str[x:y] / str[x:] / str[:y]
@@ -275,7 +276,6 @@ public class Parser {
                 }
 
                 property = parseExpr(); // either property of object or left bound for splice
-                System.out.println(tokens);
 
                 // str[x:] or str[x:y]
                 if (tokens.get(0).getType() == TokenType.Colon) {

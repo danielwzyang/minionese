@@ -1,6 +1,8 @@
 package parser;
 
+import runtime.ArrayValue;
 import runtime.Environment;
+import runtime.NullValue;
 import runtime.NumberValue;
 import runtime.RuntimeValue;
 import runtime.StringValue;
@@ -27,17 +29,26 @@ public class SpliceExpr extends Expr {
     public RuntimeValue evaluate(Environment environment) {
         RuntimeValue value = string.evaluate(environment);
 
-        if (value.getType() != ValueType.String) {
-            System.err.println("Cannot splice from a non-string expression. Expression provided: " + string);
+        if (value.getType() == ValueType.String) {
+            StringValue stringValue = (StringValue) value;
+
+            RuntimeValue left = leftBound.evaluate(environment);
+            RuntimeValue right = rightBound != null ? rightBound.evaluate(environment)
+                    : new NumberValue(stringValue.getValue().length());
+
+            return stringValue.splice(left, right, environment);
+        } else if (value.getType() == ValueType.Array) {
+            ArrayValue arrayValue = (ArrayValue) value;
+
+            RuntimeValue left = leftBound.evaluate(environment);
+            RuntimeValue right = rightBound != null ? rightBound.evaluate(environment)
+                    : new NumberValue(arrayValue.length());
+
+            return arrayValue.splice(left, right, environment);
+        } else {
+            System.err.println("Unexpected member expression on non-object value.");
             System.exit(0);
+            return new NullValue();
         }
-
-        StringValue stringValue = (StringValue) value;
-
-        RuntimeValue left = leftBound.evaluate(environment);
-        RuntimeValue right = rightBound != null ? rightBound.evaluate(environment)
-                : new NumberValue(stringValue.getValue().length());
-
-        return stringValue.splice(left, right, environment);
     }
 }

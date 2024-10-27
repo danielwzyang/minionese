@@ -1,7 +1,9 @@
 package parser;
 
+import runtime.ArrayValue;
 import runtime.Environment;
 import runtime.NullValue;
+import runtime.NumberValue;
 import runtime.ObjectValue;
 import runtime.RuntimeValue;
 import runtime.StringValue;
@@ -33,6 +35,7 @@ public class MemberExpr extends Expr {
 
     public RuntimeValue evaluate(Environment environment) {
         RuntimeValue objectValue = object.evaluate(environment);
+        // object member call
         if (objectValue.getType() == ValueType.Object) {
             String key;
             if (computed) {
@@ -59,6 +62,7 @@ public class MemberExpr extends Expr {
 
             return propertyRuntimeValue;
         }
+        // string retrieval
         else if (objectValue.getType() == ValueType.String) {
             RuntimeValue index = property.evaluate(environment);
 
@@ -70,11 +74,20 @@ public class MemberExpr extends Expr {
             return ((StringValue) objectValue).splice(index, environment);
 
         }
-        else {
+        // array retrieval
+        else if (objectValue.getType() == ValueType.Array) {
+            RuntimeValue index = property.evaluate(environment);
+            
+            if (index.getType() != ValueType.Number) {
+                System.err.println("Expected number for character retrieval from string.");
+                System.exit(0);
+            }
+
+            return ((ArrayValue) objectValue).get((NumberValue) index);
+        } else {
             System.err.println("Unexpected member expression on non-object value.");
             System.exit(0);
             return new NullValue();
         }
     }
 }
- 
