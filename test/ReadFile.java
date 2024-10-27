@@ -37,6 +37,8 @@ public class ReadFile {
             System.out.println("Type stop to end. Type ? to see variables.");
             Scanner input = new Scanner(System.in);
 
+            parser = new Parser();
+
             while (true) {
                 System.out.print("> ");
                 src = input.nextLine();
@@ -52,7 +54,6 @@ public class ReadFile {
                     continue;
                 }
 
-                parser = new Parser();
                 program = parser.makeAST(src);
                 program.evaluate(globalEnvironment);
             }

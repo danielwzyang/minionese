@@ -168,6 +168,34 @@ public class Environment {
 
             return ((ArrayValue) args[0]).insert(args[1], ((NumberValue) args[2]).getValue());
         }, "inserts element into given index of array"), true);
+
+        declareVariable("tinee", new Method((args, environment) -> {
+            if (args.length == 0) {
+                System.err.println("No arguments provided for lowercase function.");
+                System.exit(0);
+            }
+
+            if (args[0].getType() != ValueType.String) {
+                System.err.println("The argument provided for lowercase function is not a String.");
+                System.exit(0);
+            }
+
+            return new StringValue(((StringValue) args[0]).getValue().toLowerCase());
+        }, "returns lowercase version of string"), true);
+
+        declareVariable("boma", new Method((args, environment) -> {
+            if (args.length == 0) {
+                System.err.println("No arguments provided for uppercase function.");
+                System.exit(0);
+            }
+
+            if (args[0].getType() != ValueType.String) {
+                System.err.println("The argument provided for uppercase function is not a String.");
+                System.exit(0);
+            }
+
+            return new StringValue(((StringValue) args[0]).getValue().toUpperCase());
+        }, "returns uppercase version of string"), true);
     }
 
     // for the constructors we have one with no parent and one with a parent

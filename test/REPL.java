@@ -16,6 +16,7 @@ public class REPL {
         Environment globalEnvironment = new Environment();
         globalEnvironment.declareVariable("x", new NumberValue(3), false);
         globalEnvironment.declareVariable("y", new BooleanValue(), false);
+        Parser parser = new Parser();
 
         while (true) {
             System.out.print("> ");
@@ -31,8 +32,7 @@ public class REPL {
                 });
                 continue;
             }
-
-            Parser parser = new Parser();
+            
             Program program = parser.makeAST(src);
             program.evaluate(globalEnvironment);
         }
