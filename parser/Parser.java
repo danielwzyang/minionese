@@ -107,18 +107,49 @@ public class Parser {
                 System.err.println("Statement expected after condition for if statement.");
                 System.exit(0);
             }
-            
+
             body.add(parseStatement());
         }
 
-        return identifier.getType() == TokenType.If ? new IfStmt(condition, body) : new WhileStmt(condition, body);
+        ArrayList<Stmt> elseBody = new ArrayList<>();
+        // if else
+        if (identifier.getType() == TokenType.If && tokens.get(0).getType() == TokenType.Else) {
+            popLeft(); // gets rid of else
+
+            // else { ... } (multiple statements)
+            if (tokens.get(0).getType() == TokenType.OpenBrace) {
+                popLeft(); // gets rid of open brace
+                while (tokens.get(0).getType() != TokenType.CloseBrace) {
+                    if (tokens.get(0).getType() == TokenType.EOF) {
+                        System.err.println("Closing brace expected to close else statement.");
+                        System.exit(0);
+                    }
+
+                    elseBody.add(parseStatement());
+                }
+
+                popLeft(); // gets rid of closed brace
+            } else {
+                // else ... (one statement)
+                if (tokens.get(0).getType() == TokenType.EOF) {
+                    System.err.println("Statement expected after condition for else statement.");
+                    System.exit(0);
+                }
+
+                elseBody.add(parseStatement());
+            }
+
+            return new IfStmt(condition, body, elseBody);
+        }
+
+        return identifier.getType() == TokenType.If ? new IfStmt(condition, body, new ArrayList<>()) : new WhileStmt(condition, body);
     }
 
     private Stmt parseFor() {
         // format: for i 3:10
         popLeft(); // pops for loop identifier
         String identifier = popLeft(TokenType.Identifier, "Identifier expected after for loop.").getValue();
-        
+
         Expr left;
         // no left bound provided; ex: para i :10
         if (tokens.get(0).getType() == TokenType.Colon) {
@@ -128,7 +159,7 @@ public class Parser {
             left = parseExpr();
             popLeft(TokenType.Colon, "Colon expected after left bound in for loop.");
         }
-        
+
         Expr right = parseExpr();
 
         ArrayList<Stmt> body = new ArrayList<>();
@@ -148,12 +179,12 @@ public class Parser {
             popLeft(); // pops close brace
         } else {
             // for i 3:10 ...
-            
+
             if (tokens.get(0).getType() == TokenType.EOF) {
                 System.err.println("Statement expected after condition for if statement.");
                 System.exit(0);
             }
-            
+
             body.add(parseStatement());
         }
 
@@ -171,7 +202,7 @@ public class Parser {
      * additive (+, -)
      * equivalence (==)
      * comparitive (&, |, >, <, >=, <=)
-     * object
+     * object / array
      * assignment (=)
      */
 
@@ -244,6 +275,7 @@ public class Parser {
                 }
 
                 property = parseExpr(); // either property of object or left bound for splice
+                System.out.println(tokens);
 
                 // str[x:] or str[x:y]
                 if (tokens.get(0).getType() == TokenType.Colon) {
@@ -441,9 +473,30 @@ public class Parser {
         return new ObjectLiteral(properties);
     }
 
+    private Expr parseArray() {
+        if (tokens.get(0).getType() != TokenType.OpenBracket)
+            return parseObject();
+
+        popLeft(); // pops open bracket
+        ArrayList<Expr> elements = new ArrayList<>();
+        
+        // nonempty list (not [])
+        if (tokens.get(0).getType() != TokenType.CloseBracket) {
+            elements.add(parseExpr()); // adds the first element
+            while (tokens.get(0).getType() == TokenType.Comma) {
+                popLeft(); // gets rid of comma
+                elements.add(parseExpr());
+            }
+        }
+
+        popLeft(TokenType.CloseBracket, "Closing bracket expected after list definition."); // pops closed bracket
+        
+        return new Array(elements);
+    }
+
     private Expr parseAssignment() {
         // gets the expression that we're assigning
-        Expr left = parseObject();
+        Expr left = parseArray();
 
         while (tokens.get(0).getType() == TokenType.Assignment) {
             String sign = popLeft().getValue(); // pop the assignment sign

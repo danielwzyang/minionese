@@ -5,6 +5,7 @@ public enum NodeType {
     NumericLiteral,
     StringLiteral, SpliceExpr,
     Identifier,
+    Array,
     UnaryExpr, BinaryExpr,
     Declaration, Assignment,
     ObjectLiteral, Property,

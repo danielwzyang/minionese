@@ -1,7 +1,2 @@
-para i 0:50 {
-    bello(i)
-}
-
-para i 50:0 {
-    bello(i)
-}
+la array = [1, 2, 3, 4, 5]
+la poop = ["cat", "dog"]

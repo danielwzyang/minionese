@@ -13,8 +13,9 @@ public class Lexer {
         keywords = new HashMap<>();
         keywords.put("la", TokenType.Define);
         keywords.put("fin", TokenType.Final);
-        keywords.put("if", TokenType.If);
-        keywords.put("willy", TokenType.While);
+        keywords.put("asa", TokenType.If);
+        keywords.put("eko", TokenType.Else);
+        keywords.put("weebo", TokenType.While);
         keywords.put("para", TokenType.For);
     }
 

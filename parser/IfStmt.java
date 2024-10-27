@@ -11,12 +11,14 @@ import runtime.ValueType;
 public class IfStmt extends Stmt {
     private Expr condition;
     private ArrayList<Stmt> body;
+    private ArrayList<Stmt> elseBody;
 
-    public IfStmt(Expr condition, ArrayList<Stmt> body) {
+    public IfStmt(Expr condition, ArrayList<Stmt> body, ArrayList<Stmt> elseBody) {
         super(NodeType.If);
         this.body = new ArrayList<>();
         this.condition = condition;
         this.body = body;
+        this.elseBody = elseBody;
     }
 
     public ArrayList<Stmt> getBody() {
@@ -39,7 +41,10 @@ public class IfStmt extends Stmt {
         
         if (((BooleanValue) conditionValue).getValue()) {
             for (Stmt statement : body) {
-                // evaluates every statement
+                last = statement.evaluate(environment);
+            }
+        } else {
+            for (Stmt statement : elseBody) {
                 last = statement.evaluate(environment);
             }
         }
