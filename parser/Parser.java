@@ -3,8 +3,31 @@ package parser;
 import java.util.ArrayList;
 
 import lexer.Lexer;
-import lexer.Token;
-import lexer.TokenType;
+import lexer.tokens.Token;
+import lexer.tokens.TokenType;
+import parser.expr.BinaryExpr;
+import parser.expr.CallExpr;
+import parser.expr.Expr;
+import parser.expr.MemberExpr;
+import parser.expr.SpliceExpr;
+import parser.expr.UnaryExpr;
+import parser.literal.Array;
+import parser.literal.Identifier;
+import parser.literal.NumericLiteral;
+import parser.literal.ObjectLiteral;
+import parser.literal.Property;
+import parser.literal.StringLiteral;
+import parser.stmt.Assignment;
+import parser.stmt.BreakStmt;
+import parser.stmt.ContinueStmt;
+import parser.stmt.Declaration;
+import parser.stmt.ForStmt;
+import parser.stmt.IfStmt;
+import parser.stmt.MethodDeclaration;
+import parser.stmt.Program;
+import parser.stmt.ReturnStmt;
+import parser.stmt.Stmt;
+import parser.stmt.WhileStmt;
 
 public class Parser {
     private ArrayList<Token> tokens;
@@ -50,6 +73,12 @@ public class Parser {
                 return parseConditional();
             case TokenType.For:
                 return parseFor();
+            case TokenType.Return:
+                return parseReturn();
+            case TokenType.Break:
+                return parseBreak();
+            case TokenType.Continue:
+                return parseContinue();
             default:
                 return parseExpr();
         }
@@ -173,6 +202,21 @@ public class Parser {
         }
 
         return new ForStmt(new Identifier(identifier), left, right, body);
+    }
+
+    private Stmt parseReturn() {
+        popLeft(); // pops return keyword
+        return new ReturnStmt(parseExpr());
+    }
+
+    private Stmt parseBreak() {
+        popLeft(); // pops break keyword
+        return new BreakStmt();
+    }
+
+    private Stmt parseContinue() {
+        popLeft(); // pops continue keyword
+        return new ContinueStmt();
     }
 
     /*

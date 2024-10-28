@@ -1,5 +1,6 @@
-party add (a, b) {
-    a + b
+para i:10 {
+    asa i % 2 == 0
+        go
+    
+    bello(i)
 }
-
-bello(add(1, 2))

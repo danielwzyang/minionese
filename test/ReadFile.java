@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Scanner;
 
 import parser.Parser;
-import parser.Program;
-import runtime.BooleanValue;
+import parser.stmt.Program;
 import runtime.Environment;
-import runtime.NumberValue;
+import runtime.values.BooleanValue;
+import runtime.values.NumberValue;
 
 public class ReadFile {
     public static void main(String[] args) {

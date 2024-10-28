@@ -8,6 +8,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import runtime.methods.Method;
+import runtime.values.ArrayValue;
+import runtime.values.BooleanValue;
+import runtime.values.NullValue;
+import runtime.values.NumberValue;
+import runtime.values.RuntimeValue;
+import runtime.values.StringValue;
+import runtime.values.ValueType;
+
 public class Environment {
     private Environment parent;
     private Map<String, RuntimeValue> variables; // keeps track of variables and their runtime values

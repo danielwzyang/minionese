@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lexer.tokens.Token;
+import lexer.tokens.TokenType;
+
 public class Lexer {
     private static Map<String, TokenType> keywords;
     static {
@@ -17,7 +20,10 @@ public class Lexer {
         keywords.put("eko", TokenType.Else);
         keywords.put("weebo", TokenType.While);
         keywords.put("para", TokenType.For);
-        keywords.put("party", TokenType.DefineMethod);
+        keywords.put("mef", TokenType.DefineMethod);
+        keywords.put("paratu", TokenType.Return);
+        keywords.put("stopa", TokenType.Break);
+        keywords.put("go", TokenType.Continue);
     }
 
     public ArrayList<Token> tokenize(String src) {
