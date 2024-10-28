@@ -1,5 +1,5 @@
 para i:10 {
-    asa i % 2 == 0
+    asa even(i)
         go
     
     bello(i)

@@ -2,7 +2,6 @@ package runtime.methods;
 
 import java.util.ArrayList;
 
-import parser.NodeType;
 import parser.stmt.Stmt;
 import runtime.Environment;
 import runtime.values.NullValue;

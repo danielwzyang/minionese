@@ -55,15 +55,7 @@ public class Environment {
         }, "returns string of current date"), true);
 
         declareVariable("scroot", new Method((args, environment) -> {
-            if (args.length == 0) {
-                System.err.println("No arguments provided for sqrt function.");
-                System.exit(0);
-            }
-
-            if (args[0].getType() != ValueType.Number) {
-                System.err.println("The argument provided for sqrt function is not a number.");
-                System.exit(0);
-            }
+            checkStaticArguments("scroot", args, new ValueType[] {ValueType.Number});
 
             return new NumberValue(Math.sqrt(((NumberValue) args[0]).getValue()));
         }, "returns square root of given number"), true);
@@ -150,59 +142,54 @@ public class Environment {
         }, "push element to end of array"), true);
 
         declareVariable("ponga", new Method((args, environment) -> {
-            if (args.length == 0) {
-                System.err.println("No arguments provided for insert function.");
-                System.exit(0);
-            }
-
-            // array to insert into
-            if (args[0].getType() != ValueType.Array) {
-                System.err.println("The first argument provided for insert function is not an Array.");
-                System.exit(0);
-            }
-
-            // no value to insert
-            if (args.length == 1) {
-                System.err.println("No value provided (second argument).");
-                System.exit(0);
-            }
-
-            // index isn't a number
-            if (args[2].getType() != ValueType.Number) {
-                System.err.println("The index (third argument) provided for insert function is not a Number.");
-                System.exit(0);
-            }
-
+            checkStaticArguments("ponga", args, new ValueType[] {ValueType.Array, ValueType.Number});
+            
             return ((ArrayValue) args[0]).insert(args[1], ((NumberValue) args[2]).getValue());
         }, "inserts element into given index of array"), true);
 
         declareVariable("tinee", new Method((args, environment) -> {
-            if (args.length == 0) {
-                System.err.println("No arguments provided for lowercase function.");
-                System.exit(0);
-            }
-
-            if (args[0].getType() != ValueType.String) {
-                System.err.println("The argument provided for lowercase function is not a String.");
-                System.exit(0);
-            }
+            checkStaticArguments("tinee", args, new ValueType[] {ValueType.String});
 
             return new StringValue(((StringValue) args[0]).getValue().toLowerCase());
         }, "returns lowercase version of string"), true);
 
         declareVariable("boma", new Method((args, environment) -> {
-            if (args.length == 0) {
-                System.err.println("No arguments provided for uppercase function.");
-                System.exit(0);
-            }
-
-            if (args[0].getType() != ValueType.String) {
-                System.err.println("The argument provided for uppercase function is not a String.");
-                System.exit(0);
-            }
+            checkStaticArguments("boma", args, new ValueType[] {ValueType.String});
 
             return new StringValue(((StringValue) args[0]).getValue().toUpperCase());
         }, "returns uppercase version of string"), true);
+
+        declareVariable("even", new Method((args, environment) -> {
+            checkStaticArguments("even", args, new ValueType[] {ValueType.Number});
+
+            return new BooleanValue(((NumberValue) args[0]).getValue() % 2 == 0);
+        }, "checks whether number is even or not"), true);
+        
+        declareVariable("odd", new Method((args, environment) -> {
+            checkStaticArguments("odd", args, new ValueType[] {ValueType.Number});
+
+            return new BooleanValue(((NumberValue) args[0]).getValue() % 2 != 0);
+        }, "checks whether number is odd or not"), true);
+    }
+
+    private void checkStaticArguments(String name, RuntimeValue[] arguments, ValueType[] types) {
+        // checks whether arguments are valid given a set number of arguments and a set type for each
+
+        if (arguments.length != types.length) {
+            System.err
+                    .println("Method: " + name + ". Expected " + types.length + " arguments but recieved "
+                            + arguments.length + " instead.");
+            System.exit(0);
+        }
+
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].getType() != types[i]) {
+                System.err.println("Method: " + name + ". Expected type " + types[i] + " for argument " + (i + 1)
+                        + " but recieved type "
+                        + arguments[i].getType() + " instead.");
+                System.exit(0);
+            }
+        }
     }
 
     // for the constructors we have one with no parent and one with a parent
@@ -234,7 +221,7 @@ public class Environment {
         Environment scope = resolveScope(identifier);
         if (scope != null)
             return scope.getVariables().get(identifier);
-        
+
         return new NullValue();
     }
 
