@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import parser.Array;
-
 public class Environment {
     private Environment parent;
     private Map<String, RuntimeValue> variables; // keeps track of variables and their runtime values
@@ -213,6 +211,10 @@ public class Environment {
         return parent;
     }
 
+    public void setParent(Environment environment) {
+        parent = environment;
+    }
+
     public Map<String, RuntimeValue> getVariables() {
         return variables;
     }
@@ -220,7 +222,11 @@ public class Environment {
     // to get the variable value we just need to find the scope with the variable
     // and then get it from the map
     public RuntimeValue getVariableValue(String identifier) {
-        return resolveScope(identifier).getVariables().get(identifier);
+        Environment scope = resolveScope(identifier);
+        if (scope != null)
+            return scope.getVariables().get(identifier);
+        
+        return new NullValue();
     }
 
     public RuntimeValue declareVariable(String identifier, RuntimeValue value, boolean isFinal) {
@@ -276,7 +282,7 @@ public class Environment {
         // if there is no parent then the variable doesn't exist or it exists in a lower
         // scope which cannot be accessed
         if (parent == null) {
-            System.err.println("Cannot resolve " + identifier + ".");
+            return null;
         }
 
         // if there is a parent then we want to check if the variable exists in the

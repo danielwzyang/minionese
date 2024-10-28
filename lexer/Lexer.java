@@ -17,6 +17,7 @@ public class Lexer {
         keywords.put("eko", TokenType.Else);
         keywords.put("weebo", TokenType.While);
         keywords.put("para", TokenType.For);
+        keywords.put("party", TokenType.DefineMethod);
     }
 
     public ArrayList<Token> tokenize(String src) {

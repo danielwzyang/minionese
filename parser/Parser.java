@@ -83,9 +83,7 @@ public class Parser {
         return declaration;
     }
 
-    private Stmt parseConditional() {
-        Token identifier = popLeft(); // gets rid of if / while identifier
-        Expr condition = parseExpr(); // evals condition
+    private ArrayList<Stmt> parseStatementBody() {
         ArrayList<Stmt> body = new ArrayList<>();
 
         // if { ... } (multiple statements)
@@ -93,7 +91,7 @@ public class Parser {
             popLeft(); // gets rid of open brace
             while (tokens.get(0).getType() != TokenType.CloseBrace) {
                 if (tokens.get(0).getType() == TokenType.EOF) {
-                    System.err.println("Closing brace expected to close if statement.");
+                    System.err.println("Closing brace expected to close statement body.");
                     System.exit(0);
                 }
 
@@ -104,45 +102,31 @@ public class Parser {
         } else {
             // if ... (one statement)
             if (tokens.get(0).getType() == TokenType.EOF) {
-                System.err.println("Statement expected after condition for if statement.");
+                System.err.println("Statement expected for statement body.");
                 System.exit(0);
             }
 
             body.add(parseStatement());
         }
 
-        ArrayList<Stmt> elseBody = new ArrayList<>();
+        return body;
+    }
+
+    private Stmt parseConditional() {
+        Token identifier = popLeft(); // gets rid of if / while identifier
+        Expr condition = parseExpr(); // evals condition
+        ArrayList<Stmt> body = parseStatementBody();
+
         // if else
         if (identifier.getType() == TokenType.If && tokens.get(0).getType() == TokenType.Else) {
             popLeft(); // gets rid of else
-
-            // else { ... } (multiple statements)
-            if (tokens.get(0).getType() == TokenType.OpenBrace) {
-                popLeft(); // gets rid of open brace
-                while (tokens.get(0).getType() != TokenType.CloseBrace) {
-                    if (tokens.get(0).getType() == TokenType.EOF) {
-                        System.err.println("Closing brace expected to close else statement.");
-                        System.exit(0);
-                    }
-
-                    elseBody.add(parseStatement());
-                }
-
-                popLeft(); // gets rid of closed brace
-            } else {
-                // else ... (one statement)
-                if (tokens.get(0).getType() == TokenType.EOF) {
-                    System.err.println("Statement expected after condition for else statement.");
-                    System.exit(0);
-                }
-
-                elseBody.add(parseStatement());
-            }
+            ArrayList<Stmt> elseBody = parseStatementBody();
 
             return new IfStmt(condition, body, elseBody);
         }
 
-        return identifier.getType() == TokenType.If ? new IfStmt(condition, body, new ArrayList<>()) : new WhileStmt(condition, body);
+        return identifier.getType() == TokenType.If ? new IfStmt(condition, body, new ArrayList<>())
+                : new WhileStmt(condition, body);
     }
 
     private Stmt parseFor() {
@@ -204,11 +188,12 @@ public class Parser {
      * comparitive (&, |, >, <, >=, <=)
      * object / array
      * assignment (=)
+     * method declaration
      */
 
     private Expr parseExpr() {
         // this always calls the one in the bottom of the order of precedence
-        return parseAssignment();
+        return parseMethodDeclaration();
     }
 
     private Expr parsePrimaryExpr() {
@@ -479,7 +464,7 @@ public class Parser {
 
         popLeft(); // pops open bracket
         ArrayList<Expr> elements = new ArrayList<>();
-        
+
         // nonempty list (not [])
         if (tokens.get(0).getType() != TokenType.CloseBracket) {
             elements.add(parseExpr()); // adds the first element
@@ -490,7 +475,7 @@ public class Parser {
         }
 
         popLeft(TokenType.CloseBracket, "Closing bracket expected after list definition."); // pops closed bracket
-        
+
         return new Array(elements);
     }
 
@@ -514,5 +499,25 @@ public class Parser {
         }
 
         return left;
+    }
+
+    private Expr parseMethodDeclaration() {
+        if (tokens.get(0).getType() != TokenType.DefineMethod)
+            return parseAssignment();
+
+        popLeft(); // gets rid of method declaration keyword
+        String name = popLeft(TokenType.Identifier, "Identifier expected after method declaration keyword.").getValue();
+        Expr[] arguments = parseArguments();
+        String[] params = new String[arguments.length];
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].getType() != NodeType.Identifier) {
+                System.err.println("Parameter provided for method declaration is not an identifier.");
+                System.exit(0);
+            }
+            params[i] = ((Identifier) arguments[i]).getName();
+        }
+        ArrayList<Stmt> body = parseStatementBody();
+
+        return new MethodDeclaration(name, params, body);
     }
 }

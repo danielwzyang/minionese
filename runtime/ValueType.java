@@ -6,6 +6,7 @@ public enum ValueType {
     String,
     Boolean,
     Object,
-    Method,
+    Method, 
+    UserMethod,
     Array
 }

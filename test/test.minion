@@ -1,16 +1,5 @@
-la case1 = "raceasdascar"
-
-la lowercase = tinee(case1)
-
-la l = 0
-la r = len(lowercase) - 1
-
-weebo l < r {
-    asa lowercase[l] == lowercase[r] {
-        l++
-        r--
-    } eko {
-        bello(case1, "is not a palindrome")
-        l = r
-    }
+party add (a, b) {
+    a + b
 }
+
+bello(add(1, 2))

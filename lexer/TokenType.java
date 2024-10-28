@@ -4,7 +4,7 @@ public enum TokenType {
     EOF,
     Number,
     String,
-    Define, Final,
+    Define, Final, DefineMethod,
     Equivalence, BinOp,
     Increment, Negation,
     If, Else, While, For,
