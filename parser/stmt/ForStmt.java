@@ -56,8 +56,8 @@ public class ForStmt extends Stmt {
             environment.declareVariable(identifier.getName(), leftValue, false);
 
         Expr condition = new BinaryExpr(identifier, right, comparison);
-        body.add(new UnaryExpr(increment, identifier));
-        WhileStmt whileStmt = new WhileStmt(condition, body);
+        Expr incrementExpr = new UnaryExpr(increment, identifier);
+        WhileStmt whileStmt = new WhileStmt(condition, body, incrementExpr);
 
         return whileStmt.evaluate(environment);
     }

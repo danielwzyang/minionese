@@ -40,14 +40,22 @@ public class IfStmt extends Stmt {
         }
 
         RuntimeValue last = new NullValue();
-        
+
         if (((BooleanValue) conditionValue).getValue()) {
             for (Stmt statement : body) {
                 last = statement.evaluate(environment);
+                if (last.getType() == ValueType.Return || last.getType() == ValueType.Break)
+                    return last;
+                if (last.getType() == ValueType.Continue)
+                    break;
             }
         } else {
             for (Stmt statement : elseBody) {
                 last = statement.evaluate(environment);
+                if (last.getType() == ValueType.Return || last.getType() == ValueType.Break)
+                    return last;
+                if (last.getType() == ValueType.Continue)
+                    break;
             }
         }
 

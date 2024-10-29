@@ -147,6 +147,18 @@ public class Environment {
             return ((ArrayValue) args[0]).insert(args[1], ((NumberValue) args[2]).getValue());
         }, "inserts element into given index of array"), true);
 
+        declareVariable("top", new Method((args, environment) -> {
+            checkStaticArguments("top", args, new ValueType[]{ValueType.Array});
+
+            return ((ArrayValue) args[0]).top();
+        }, "gets the top element of an array"), false);
+
+        declareVariable("buttom", new Method((args, environment) -> {
+            checkStaticArguments("buttom", args, new ValueType[]{ValueType.Array});
+
+            return ((ArrayValue) args[0]).bottom();
+        }, "gets the bottom element of an array"), false);
+
         declareVariable("tinee", new Method((args, environment) -> {
             checkStaticArguments("tinee", args, new ValueType[] {ValueType.String});
 

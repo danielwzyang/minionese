@@ -70,6 +70,14 @@ public class ArrayValue extends RuntimeValue {
         return value;
     }
 
+    public RuntimeValue top() {
+        return elements.getLast();
+    }
+
+    public RuntimeValue bottom() {
+        return elements.getFirst();
+    }
+
     public RuntimeValue get(NumberValue index) {
         double i = index.getValue();
         if ((int) i != i) {

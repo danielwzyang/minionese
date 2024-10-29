@@ -1,6 +1,24 @@
-para i:10 {
-    asa even(i)
-        go
-    
-    bello(i)
+mef isValid(s) {
+    la stack = []
+
+    para i 0:len(s) {
+        asa s[i] == "(" | s[i] == "[" | s[i] == "{" {
+            hat(stack, s[i])
+        } eko {
+            asa len(stack) == 0 | 
+                (s[i] == ")" & top(stack) != "(") |
+                (s[i] == "]" & top(stack) != "[") |
+                (s[i] == "}" & top(stack) != "{") {
+                paratu no
+            }
+            bob(stack)
+        }
+    }
+
+    paratu len(stack) == 0
 }
+
+bello(isValid("()"))
+bello(isValid("()[]{}"))
+bello(isValid("(]"))
+bello(isValid("([])"))

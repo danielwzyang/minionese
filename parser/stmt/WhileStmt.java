@@ -13,12 +13,21 @@ import runtime.values.ValueType;
 public class WhileStmt extends Stmt {
     private Expr condition;
     private ArrayList<Stmt> body;
+    private Expr incrementExpr;
 
     public WhileStmt(Expr condition, ArrayList<Stmt> body) {
         super(NodeType.While);
         this.body = new ArrayList<>();
         this.condition = condition;
         this.body = body;
+    }
+
+    public WhileStmt(Expr condition, ArrayList<Stmt> body, Expr incrementExpr) {
+        super(NodeType.While);
+        this.body = new ArrayList<>();
+        this.condition = condition;
+        this.body = body;
+        this.incrementExpr = incrementExpr;
     }
 
     public ArrayList<Stmt> getBody() {
@@ -46,12 +55,10 @@ public class WhileStmt extends Stmt {
 
                 if (last.getType() == ValueType.Return || last.getType() == ValueType.Break)
                     return last;
-                if (last.getType() == ValueType.Continue) {
-                    body.getLast().evaluate(environment); // evaluate the increment statement to move forward
+                if (last.getType() == ValueType.Continue)
                     break;
-                }
-                    
             }
+            if (incrementExpr != null) incrementExpr.evaluate(environment);
             // updates condition value
             conditionValue = condition.evaluate(environment);
         }
