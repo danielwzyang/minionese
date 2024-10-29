@@ -1,8 +1,6 @@
-package parser.stmt;
+package parser.expr;
 
 import parser.NodeType;
-import parser.expr.Expr;
-import parser.expr.MemberExpr;
 import parser.literal.Identifier;
 import parser.literal.StringLiteral;
 import runtime.Environment;

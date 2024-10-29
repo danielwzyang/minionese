@@ -2,7 +2,6 @@ package parser.expr;
 
 import parser.NodeType;
 import parser.literal.NumericLiteral;
-import parser.stmt.Assignment;
 import runtime.Environment;
 import runtime.values.BooleanValue;
 import runtime.values.NullValue;
