@@ -18,7 +18,7 @@ mef isValid(s) {
     paratu len(stack) == 0
 }
 
-bello(isValid("()"))
-bello(isValid("()[]{}"))
-bello(isValid("(]"))
-bello(isValid("([])"))
+bello(isValid("()")) "expect true"
+bello(isValid("()[]{}")) "expect true"
+bello(isValid("(]")) "expect false"
+bello(isValid("([])")) "expect true"

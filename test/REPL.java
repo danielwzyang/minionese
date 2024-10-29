@@ -4,7 +4,6 @@ import java.util.Scanner;
 import parser.Parser;
 import parser.stmt.Program;
 import runtime.Environment;
-import runtime.values.BooleanValue;
 import runtime.values.NumberValue;
 
 public class REPL {
@@ -14,8 +13,8 @@ public class REPL {
 
         // declare testing variables
         Environment globalEnvironment = new Environment();
-        globalEnvironment.declareVariable("x", new NumberValue(3), false);
-        globalEnvironment.declareVariable("y", new BooleanValue(), false);
+        globalEnvironment.declareVariable("min", new NumberValue(Integer.MIN_VALUE), false);
+        globalEnvironment.declareVariable("max", new NumberValue(Integer.MAX_VALUE), false);
         Parser parser = new Parser();
 
         while (true) {
