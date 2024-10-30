@@ -1,6 +1,7 @@
 package runtime.values;
 
 import runtime.Environment;
+import runtime.ValueType;
 
 public class StringValue extends RuntimeValue {
     private String value;

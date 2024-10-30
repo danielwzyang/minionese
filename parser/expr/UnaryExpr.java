@@ -3,10 +3,10 @@ package parser.expr;
 import parser.NodeType;
 import parser.literal.NumericLiteral;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.BooleanValue;
 import runtime.values.NullValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class UnaryExpr extends Expr {
     String operator;

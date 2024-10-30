@@ -2,11 +2,11 @@ package parser.expr;
 
 import parser.NodeType;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.methods.Method;
 import runtime.methods.UserMethod;
 import runtime.values.NullValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class CallExpr extends Expr {
     private Expr[] arguments;

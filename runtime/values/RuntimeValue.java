@@ -1,5 +1,7 @@
 package runtime.values;
 
+import runtime.ValueType;
+
 public abstract class RuntimeValue {
     private ValueType type;
 
@@ -17,3 +19,4 @@ public abstract class RuntimeValue {
 
     public abstract RuntimeValue operate(RuntimeValue right, String operator);
 }
+ 

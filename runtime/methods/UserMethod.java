@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import parser.stmt.Stmt;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.NullValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class UserMethod extends RuntimeValue {
     private String[] params;

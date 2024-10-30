@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import runtime.ValueType;
+
 public class ObjectValue extends RuntimeValue {
     private Map<String, RuntimeValue> properties;
 

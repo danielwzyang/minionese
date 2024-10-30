@@ -3,9 +3,9 @@ package runtime.methods;
 import java.util.function.BiFunction;
 
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.NullValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class Method extends RuntimeValue {
     private BiFunction<RuntimeValue[], Environment, RuntimeValue> call;

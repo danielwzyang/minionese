@@ -4,10 +4,10 @@ import parser.NodeType;
 import parser.literal.Identifier;
 import parser.literal.StringLiteral;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.NullValue;
 import runtime.values.ObjectValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class Assignment extends Expr {
     private Expr assignedExpr;

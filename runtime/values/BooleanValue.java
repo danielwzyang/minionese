@@ -1,5 +1,7 @@
 package runtime.values;
 
+import runtime.ValueType;
+
 public class BooleanValue extends RuntimeValue {
     private boolean value;
 

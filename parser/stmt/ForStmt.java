@@ -8,9 +8,9 @@ import parser.expr.Expr;
 import parser.expr.UnaryExpr;
 import parser.literal.Identifier;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.NumberValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class ForStmt extends Stmt {
     private Identifier identifier;

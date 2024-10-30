@@ -3,6 +3,7 @@ package runtime.values;
 import java.util.ArrayList;
 
 import runtime.Environment;
+import runtime.ValueType;
 
 public class ArrayValue extends RuntimeValue {
     ArrayList<RuntimeValue> elements;

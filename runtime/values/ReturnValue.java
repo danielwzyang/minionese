@@ -1,5 +1,7 @@
 package runtime.values;
 
+import runtime.ValueType;
+
 public class ReturnValue extends RuntimeValue {
     private RuntimeValue value;
 

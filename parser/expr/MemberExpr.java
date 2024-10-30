@@ -3,13 +3,13 @@ package parser.expr;
 import parser.NodeType;
 import parser.literal.Identifier;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.ArrayValue;
 import runtime.values.NullValue;
 import runtime.values.NumberValue;
 import runtime.values.ObjectValue;
 import runtime.values.RuntimeValue;
 import runtime.values.StringValue;
-import runtime.values.ValueType;
 
 public class MemberExpr extends Expr {
     private Expr object;

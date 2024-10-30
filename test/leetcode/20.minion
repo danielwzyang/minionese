@@ -11,7 +11,7 @@ mef isValid(s) {
                 (s[i] == "}" & top(stack) != "{") {
                 paratu no
             }
-            bob(stack)
+            bob(stack) 
         }
     }
 

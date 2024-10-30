@@ -1,5 +1,7 @@
 package runtime.values;
 
+import runtime.ValueType;
+
 public class NullValue extends RuntimeValue {
     private String value;
 

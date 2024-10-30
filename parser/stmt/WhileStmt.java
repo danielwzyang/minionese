@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import parser.NodeType;
 import parser.expr.Expr;
 import runtime.Environment;
+import runtime.ValueType;
 import runtime.values.BooleanValue;
 import runtime.values.NullValue;
 import runtime.values.RuntimeValue;
-import runtime.values.ValueType;
 
 public class WhileStmt extends Stmt {
     private Expr condition;

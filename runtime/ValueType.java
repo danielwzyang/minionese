@@ -1,4 +1,4 @@
-package runtime.values;
+package runtime;
 
 public enum ValueType {
     Null,
@@ -9,6 +9,8 @@ public enum ValueType {
     Method, 
     UserMethod,
     Array,
+    Map,
     Return,
-    Break, Continue
+    Break, 
+    Continue
 }

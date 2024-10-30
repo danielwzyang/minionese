@@ -1,0 +1,14 @@
+mef containsDuplicate(nums) {
+    la seen = mapa()
+    para i:len(nums) {
+        asa has(seen, nums[i])
+            paratu da
+        eko
+            ponga(seen, nums[i], 0)
+    }
+    paratu no
+}
+
+bello(containsDuplicate([1, 2, 3, 1])) "expect true"
+bello(containsDuplicate([1, 2, 3, 4])) "expect false"
+bello(containsDuplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2])) "expect true"

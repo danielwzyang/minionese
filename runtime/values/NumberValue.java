@@ -1,5 +1,7 @@
 package runtime.values;
 
+import runtime.ValueType;
+
 public class NumberValue extends RuntimeValue {
     private double value;
 
