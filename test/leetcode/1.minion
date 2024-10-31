@@ -1,0 +1,14 @@
+mef twoSum(nums, target) {
+    la seen = mapa()
+
+    para i:len(nums) {
+        asa has(seen, target - nums[i])
+            paratu [nob(seen, target - nums[i]), i]
+        
+        ponga(seen, nums[i], i)
+    }
+}
+
+bello(twoSum([2, 7, 11, 15], 9)) "expects [0, 1]"
+bello(twoSum([3, 2, 4], 6)) "expects [1, 2]"
+bello(twoSum([3, 3], 6)) "expects [0, 1]"
