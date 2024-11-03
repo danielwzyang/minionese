@@ -9,8 +9,6 @@ Clone the repo in your local.
 
 Go into the root folder and compile all the files.
 
-    javac lexer/*.java parser/*.java runtime/*.java test/*.java
-
 Now you can either run the REPL or interpret a text file. Always run the files from the root folder. 
 To see some example minionese code, look at the .minion files inside of the test folder.
 
