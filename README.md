@@ -81,7 +81,7 @@ Example:
     fin z
 
 ## Shorthand Assignment Operators
-Currently the supported shorthand assignment operators are the following:
+Currently the supported shorthand assignment operators are as follows:
 
  - x += y
  - x -= y
@@ -204,14 +204,118 @@ To break out of a loop, use the "stopa" key word.
 To continue a loop, use the "go" keyword.
 This can be used for both while and for loops.
 
-# Numbers
+# Values
+## Null Values
+As mentioned earlier in the final declaration section, the "nool" keyword creates a null value. 
 
-# Booleans
+## Numbers
+All numbers are implemented using the Java double type, so they follow the same restrictions.
+The comparison operators <, <=, >, >=, ==, and != can be used with other numbers.
 
-# Strings
+There are also some built in keywords with specific values:
 
-# Arrays
+ - nah = 1
+ - dul = 2
+ - sae = 3
+ - pi = 3.1415926...
 
-# Objects
+The scroot function returns the square root of the given number.
 
-# Maps
+    scroot(4) "2.0"
+
+The even and odd functions return a boolean of whether the given number is even or odd.
+
+	even(2) "true"
+	odd(2) "false"
+
+## Booleans
+The "da" and "no" keywords have the values yes and no, respectively.
+Use &, |, and ! as the boolean operators and, or, and not, respectively.
+
+## Strings
+To define a string, use double quotations. Strings can contain any character except for double quotations.
+The comparison operators == and != can be used with other strings.
+Strings can be multiplied using * and a number.
+Addition with numbers and booleans will return a string.
+
+The len function returns the length of the string.
+
+    len("abcde") "5"
+
+The tinee function converts the alphanumeric characters in the string to lowercase characters.
+
+    bello(tinee("ABCDEF")) "abcdef"
+
+The boma function converts the alphanumeric characters in the string to uppercase characters.
+
+	bello(boma("abcdef")) "ABCDEF"
+
+## Arrays
+To define a string, use square brackets with each element separated by a comma. Arrays are implemented using Java's ArrayList, so the size is variable. They can also contain multiple types.
+
+The bob function pops the top element of the given array and returns it. If an index is provided it will remove the element at that index and move everything in front of it backwards.
+
+    la test = [1, 2, 3, 4, 5]
+	bello(bob(test)) "5"
+	bello(test) "[1, 2, 3, 4]"
+	bello(bob(test, 1)) "2"
+	bello(test) "[1, 3, 4]"
+
+The bobPrima function pops the first element of the given array and returns it.
+
+    la test = [1, 2, 3]
+    bello(bobPrima(test)) "1"
+
+The hat function pushes an element to the front of the array. If an index is specified it will insert the element in that index and move everything in front of it forward.
+
+    la test = [1, 2, 3]
+    hat(test, 4)
+    bello(test) "[1, 2, 3, 4]"
+    hat(test, 1.5, 1)
+    bello(test) "[1, 1.5, 2, 3, 4]"
+
+The top function retrieves the last element of the array without removing it.
+
+    la test = [1, 2, 3]
+    bello(top(test)) "3"
+    bello(test) "[1, 2, 3]"
+
+The buttom function retrieves the first element of the array without removing it.
+
+    la test = [1, 2, 3]
+    bello(buttom(test)) "1"
+    bello(test) "[1, 2, 3]"
+
+## Objects
+To define an object, use curly braces. The keys should not have quotations and they should be followed by a colon and its value. A variable can also be passed into the object as a key value pair. The key value pairs should be separated by commas.
+
+    la foo = "bar"
+	
+	la obj = {
+		foo,
+		test: 10,
+		bar: {
+			baz: "qux"
+		}
+	}
+
+## Maps
+To define a map, use the mapa function. This will create an empty map with no key value pairs. All the keys are parsed as strings, so inputting a 3.0 as a key would be interpreted as the key "3.0".
+
+The ponga function puts in a key value pair. If there was already a value associated with the given key it will return the previous value. Otherwise it will return null.
+
+    la map = mapa()
+    ponga(map, "age", 10)
+  
+The nob function retrieves the value associated with a key. If the key doesn't exist in the map then it will return null.
+  
+
+    bello(nob(map, "age")) "10"
+
+The yoink function removes a key from the map and returns its associated value. It will return null if the key didn't exist. 
+
+    yoink(map, "age")
+
+The has function returns a boolean of whether the map contains the given key.
+
+    bello(has(map, "age")) "false"
