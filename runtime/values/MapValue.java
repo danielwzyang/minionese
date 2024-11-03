@@ -33,6 +33,8 @@ public class MapValue extends RuntimeValue {
     }
 
     public RuntimeValue operate(RuntimeValue value, String operator) {
+        System.err.println("Binary operators are not supported with maps.");
+        System.exit(0);
         return new NullValue();
     }
 }

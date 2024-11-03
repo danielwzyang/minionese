@@ -28,15 +28,11 @@ public class Program extends Stmt {
     }
 
     public RuntimeValue evaluate(Environment globalEnvironment) {
-        // this is what's called when we run the code since we have to run the program through it
-        // here we keep track of the last evaluated statement
-        RuntimeValue last = new NullValue();
-
         for (Stmt statement : body) {
             // goes through every statement and evaluates it
-            last = statement.evaluate(globalEnvironment);
+            statement.evaluate(globalEnvironment);
         }
 
-        return last;
+        return new NullValue();
     }
 }

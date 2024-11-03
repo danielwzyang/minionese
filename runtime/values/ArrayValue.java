@@ -14,12 +14,7 @@ public class ArrayValue extends RuntimeValue {
     }
 
     public String toString() {
-        ArrayList<String> elementStrings = new ArrayList<>();
-        for (RuntimeValue ele : elements) {
-            elementStrings.add(ele.toString());
-        }
-
-        return elementStrings.toString();
+        return elements.toString();
     }
 
     public double length() {
@@ -117,6 +112,8 @@ public class ArrayValue extends RuntimeValue {
     }
 
     public RuntimeValue operate(RuntimeValue value, String operator) {
+        System.err.println("Binary operators are not supported with arrays.");
+        System.exit(0);
         return new NullValue();
     }
 }

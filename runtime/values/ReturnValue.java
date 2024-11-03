@@ -23,6 +23,8 @@ public class ReturnValue extends RuntimeValue {
     }
 
     public RuntimeValue operate(RuntimeValue value, String operator) {
+        System.err.println("Binary operators are not supported with return values.");
+        System.exit(0);
         return new NullValue();
     }
 }

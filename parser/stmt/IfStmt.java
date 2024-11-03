@@ -39,26 +39,24 @@ public class IfStmt extends Stmt {
             System.exit(0);
         }
 
-        RuntimeValue last = new NullValue();
-
         if (((BooleanValue) conditionValue).getValue()) {
             for (Stmt statement : body) {
-                last = statement.evaluate(environment);
-                if (last.getType() == ValueType.Return || last.getType() == ValueType.Break)
-                    return last;
-                if (last.getType() == ValueType.Continue)
+                RuntimeValue eval = statement.evaluate(environment);
+                if (eval.getType() == ValueType.Return || eval.getType() == ValueType.Break)
+                    return eval;
+                if (eval.getType() == ValueType.Continue)
                     break;
             }
         } else {
             for (Stmt statement : elseBody) {
-                last = statement.evaluate(environment);
-                if (last.getType() == ValueType.Return || last.getType() == ValueType.Break)
-                    return last;
-                if (last.getType() == ValueType.Continue)
+                RuntimeValue eval = statement.evaluate(environment);
+                if (eval.getType() == ValueType.Return || eval.getType() == ValueType.Break)
+                    return eval;
+                if (eval.getType() == ValueType.Continue)
                     break;
             }
         }
 
-        return last;
+        return new NullValue();
     }
 }

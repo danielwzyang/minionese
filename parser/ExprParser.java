@@ -257,7 +257,7 @@ public class ExprParser {
 
         while (tokens.get(0).getType() == TokenType.Equivalence) {
             String operator = popLeft().getValue();
-            Expr right = parseAdditiveExpr();
+            Expr right = parseExpr();
 
             left = new BinaryExpr(left, right, operator);
         }

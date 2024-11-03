@@ -45,24 +45,25 @@ public class WhileStmt extends Stmt {
             System.err.println("Condition for while statement is not a boolean.");
             System.exit(0);
         }
-
-        RuntimeValue last = new NullValue();
         
         while (((BooleanValue) conditionValue).getValue()) {
             for (Stmt statement : body) {
                 // evaluates every statement
-                last = statement.evaluate(environment);
+                RuntimeValue eval = statement.evaluate(environment);
 
-                if (last.getType() == ValueType.Return || last.getType() == ValueType.Break)
-                    return last;
-                if (last.getType() == ValueType.Continue)
+                if (eval.getType() == ValueType.Return || eval.getType() == ValueType.Break)
+                    return eval;
+                if (eval.getType() == ValueType.Continue)
                     break;
             }
+            
+            // increments if this is a for loop
             if (incrementExpr != null) incrementExpr.evaluate(environment);
+            
             // updates condition value
             conditionValue = condition.evaluate(environment);
         }
 
-        return last;
+        return new NullValue();
     }
 }

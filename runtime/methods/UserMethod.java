@@ -34,16 +34,14 @@ public class UserMethod extends RuntimeValue {
             innerEnvironment.declareVariable(params[i], arguments[i], false);
         }
 
-        RuntimeValue last = new NullValue();
-
         for (Stmt statement : body) {
-            last = statement.evaluate(innerEnvironment);
+            RuntimeValue eval = statement.evaluate(innerEnvironment);
 
-            if (last.getType() == ValueType.Return)
-                return last;
+            if (eval.getType() == ValueType.Return)
+                return eval;
         }
 
-        return last;
+        return new NullValue();
     }
 
     public RuntimeValue operate(RuntimeValue value, String operator) {

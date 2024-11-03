@@ -39,7 +39,7 @@ public class Lexer {
         patterns.append("|(?<CloseP>\\))");
         patterns.append("|(?<Equivalence>!=|==)");
         patterns.append("|(?<Assignment>\\+=|-=|\\*=|/=|//=|\\^=|%=|=)");
-        patterns.append("|(?<Negation>!)");
+        patterns.append("|(?<Negation>!)"); 
         patterns.append("|(?<Increment>\\+\\+|--)");
         patterns.append("|(?<BinOp>\\<=|\\>=|\\<|\\>|//|[+\\-*/%\\^&\\|])");
         patterns.append("|(?<Whitespace>[ \\t]+)");

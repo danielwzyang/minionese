@@ -25,6 +25,13 @@ public class MethodDeclaration extends Expr {
     }
 
     public RuntimeValue evaluate(Environment environment) {
+        for (String param : params) {
+            if (environment.resolveScope(param) != null) {
+                System.err.println("Parameter " + param + " in method declaration for " + name + " is already defined as a variable.");
+                System.exit(0);
+            }
+        }
+
         return environment.declareVariable(name, new UserMethod(params, body), false);
     }
 }

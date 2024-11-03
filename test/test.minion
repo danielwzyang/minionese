@@ -1,0 +1,7 @@
+la w = 10
+weebo w > 0 {
+    
+    w -= 3
+    bello(w)
+}
+bello(w)

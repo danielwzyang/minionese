@@ -3,6 +3,7 @@ package parser.stmt;
 import parser.NodeType;
 import parser.expr.Expr;
 import runtime.Environment;
+import runtime.values.NullValue;
 import runtime.values.RuntimeValue;
 
 public class Declaration extends Stmt {
@@ -45,6 +46,8 @@ public class Declaration extends Stmt {
     }
 
     public RuntimeValue evaluate(Environment environment) {
-        return environment.declareVariable(identifier, value.evaluate(environment), isFinal);
+        RuntimeValue declaredValue = value == null ? new NullValue() : value.evaluate(environment);
+
+        return environment.declareVariable(identifier, declaredValue, isFinal);
     }
 }
